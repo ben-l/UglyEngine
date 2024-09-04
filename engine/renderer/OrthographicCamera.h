@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-namespace UglyEngine {
+namespace Ugly {
 
     class OrthographicCamera
     {

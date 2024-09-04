@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
  
-namespace UglyEngine {
+namespace Ugly {
 
     OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
     {

@@ -4,8 +4,8 @@
 #include <string>
 #include <functional>
 
-namespace UglyEngine {
-    /* Events in UglyEngine are blocking - events
+namespace Ugly {
+    /* Events in Ugly are blocking - events
      * are immediately dealt with - needs changing
      * to buffer */
 

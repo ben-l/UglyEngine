@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace UglyEngine {
+namespace Ugly {
     class Shader 
     {
         public:

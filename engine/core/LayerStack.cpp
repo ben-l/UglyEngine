@@ -1,7 +1,7 @@
 #include <uepch.h>
 #include <LayerStack.h>
 
-namespace UglyEngine {
+namespace Ugly {
 
     LayerStack::LayerStack()
     {

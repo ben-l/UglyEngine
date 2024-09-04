@@ -11,7 +11,7 @@
 #include <glad/glad.h>
 
 
-namespace UglyEngine {
+namespace Ugly {
     ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer")
     {
     }

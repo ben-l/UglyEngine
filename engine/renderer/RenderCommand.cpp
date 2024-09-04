@@ -2,6 +2,6 @@
 #include <RenderCommand.h>
 #include <OpenGLRendererAPI.h>
 
-namespace UglyEngine {
+namespace Ugly {
     RendererAPI* RenderCommand::s_RendererAPI = new OpenGLRendererAPI;
 }

@@ -5,13 +5,13 @@
 #include <Core.h>
 #include <Event.h>
 
-namespace UglyEngine {
+namespace Ugly {
     struct WindowProps {
         std::string Title;
         unsigned int Width;
         unsigned int Height;
 
-        WindowProps(const std::string& title = "UglyEngine",
+        WindowProps(const std::string& title = "Ugly",
                      unsigned int width = 1280,
                      unsigned int height = 720)
             :Title(title), Width(width), Height(height)

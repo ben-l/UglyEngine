@@ -3,7 +3,7 @@
 #include <Application.h>
 #include <GLFW/glfw3.h>
 
-namespace UglyEngine {
+namespace Ugly {
 
     Input* Input::s_Instance = new LinuxInput();
 

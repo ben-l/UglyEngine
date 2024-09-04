@@ -3,7 +3,7 @@
 #include "Renderer.h"
 #include "OpenGLVertexArray.h"
 
-namespace UglyEngine {
+namespace Ugly {
 
     VertexArray* VertexArray::Create()
     {

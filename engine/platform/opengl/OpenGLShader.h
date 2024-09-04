@@ -2,7 +2,7 @@
 #include "Shader.h"
 #include <glm/glm.hpp>
 
-namespace UglyEngine {
+namespace Ugly {
 
     class OpenGLShader: public Shader {
         public:

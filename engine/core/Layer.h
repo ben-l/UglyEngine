@@ -4,7 +4,7 @@
 #include <Timestep.h>
 #include <Event.h>
 
-namespace UglyEngine {
+namespace Ugly {
     class UGLY_ENGINE_API Layer
     {
        public:

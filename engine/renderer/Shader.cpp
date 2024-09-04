@@ -3,7 +3,7 @@
 #include "Renderer.h"
 #include "OpenGLShader.h"
 
-namespace UglyEngine {
+namespace Ugly {
 
     Shader* Shader::Create(const std::string& vertexSrc,const std::string& fragmentSrc)
     {

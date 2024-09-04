@@ -3,7 +3,7 @@
 #include <Event.h>
 #include <sstream>
 
-namespace UglyEngine {
+namespace Ugly {
     class UGLY_ENGINE_API KeyEvent : public Event {
         public:
             inline int GetKeyCode() const { return m_KeyCode; }

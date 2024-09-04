@@ -4,7 +4,7 @@
 #include <Renderer.h>
 #include <OpenGLBuffer.h>
 
-namespace UglyEngine {
+namespace Ugly {
      VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
      {
          switch(Renderer::GetAPI())

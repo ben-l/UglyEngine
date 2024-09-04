@@ -4,7 +4,7 @@
 
 #include <GLFW/glfw3.h>
 
-namespace UglyEngine {
+namespace Ugly {
 
     class LinuxWindow : public Window
     {

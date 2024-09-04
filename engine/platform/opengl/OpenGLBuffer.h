@@ -1,7 +1,7 @@
 #pragma once
 #include <Buffer.h>
 
-namespace UglyEngine {
+namespace Ugly {
     class OpenGLVertexBuffer : public VertexBuffer{
         public:
             OpenGLVertexBuffer(float* vertices, uint32_t size);

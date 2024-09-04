@@ -2,7 +2,7 @@
 
 #include <RendererAPI.h>
 
-namespace UglyEngine {
+namespace Ugly {
 
     class RenderCommand {
         public:
@@ -16,7 +16,7 @@ namespace UglyEngine {
                 s_RendererAPI->Clear();
             }
 
-            inline static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
+            inline static void DrawIndexed(const Ref<VertexArray>& vertexArray)
             {
                 s_RendererAPI->DrawIndexed(vertexArray);
             }

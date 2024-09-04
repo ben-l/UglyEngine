@@ -1,6 +1,6 @@
 #include <uepch.h>
 #include <RendererAPI.h>
 
-namespace UglyEngine {
+namespace Ugly {
     RendererAPI::API RendererAPI::s_API = RendererAPI::API::OpenGL;
 }

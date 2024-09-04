@@ -3,7 +3,7 @@
 #include <Event.h>
 #include <sstream>
 
-namespace UglyEngine {
+namespace Ugly {
     class UGLY_ENGINE_API WindowResizeEvent : public Event {
         public:
             WindowResizeEvent(unsigned int width, unsigned int height)

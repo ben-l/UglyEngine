@@ -1,11 +1,12 @@
 #pragma once
+#include <memory>
 
 #ifdef __linux__ 
     // not needed for static library
     //#define UGLY_ENGINE_API __attribute__((visibility("default")))
     #define UGLY_ENGINE_API
 #else
-#error UglyEngine only supports Linux!
+#error Ugly only supports Linux!
 #endif
 
 #ifdef UE_DEBUG
@@ -32,3 +33,11 @@
 
 #define UE_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
+namespace Ugly {
+    template<typename T>
+    using Scope = std::unique_ptr<T>;
+
+    template<typename T>
+    using Ref = std::shared_ptr<T>;
+
+}

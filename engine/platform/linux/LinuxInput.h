@@ -1,7 +1,7 @@
 #pragma once
 #include <Input.h>
 
-namespace UglyEngine {
+namespace Ugly {
     class LinuxInput : public Input {
         protected:
             virtual bool IsKeyPressedImpl(int keycode) override;

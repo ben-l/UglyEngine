@@ -1,6 +1,6 @@
 #pragma once
 
-namespace UglyEngine {
+namespace Ugly {
     class GraphicsContext {
         public:
             virtual void Init() = 0;

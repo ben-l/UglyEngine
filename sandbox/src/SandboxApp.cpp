@@ -4,13 +4,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-class ExampleLayer : public UglyEngine::Layer
+class ExampleLayer : public Ugly::Layer
 {
     public:
         ExampleLayer()
 			: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f), m_SquarePosition(0.0f)
         {
-        	m_VertexArray.reset(UglyEngine::VertexArray::Create());
+        	m_VertexArray.reset(Ugly::VertexArray::Create());
 
         	float vertices[3 * 7] = {
         	   -0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
@@ -18,21 +18,21 @@ class ExampleLayer : public UglyEngine::Layer
         	    0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f 
         	};
 
-        	std::shared_ptr<UglyEngine::VertexBuffer> vertexBuffer;
-        	vertexBuffer.reset(UglyEngine::VertexBuffer::Create(vertices, sizeof(vertices)));
-			UglyEngine::BufferLayout layout = {
-        	    { UglyEngine::ShaderDataType::Float3, "a_Position" },
-        	    { UglyEngine::ShaderDataType::Float4, "a_Color" }
+            Ugly::Ref<Ugly::VertexBuffer> vertexBuffer;
+        	vertexBuffer.reset(Ugly::VertexBuffer::Create(vertices, sizeof(vertices)));
+			Ugly::BufferLayout layout = {
+        	    { Ugly::ShaderDataType::Float3, "a_Position" },
+        	    { Ugly::ShaderDataType::Float4, "a_Color" }
         	};
         	vertexBuffer->SetLayout(layout);
         	m_VertexArray->AddVertexBuffer(vertexBuffer);
 
         	uint32_t indices[3] = { 0, 1, 2 };
-        	std::shared_ptr<UglyEngine::IndexBuffer> indexBuffer;
-        	indexBuffer.reset(UglyEngine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+            Ugly::Ref<Ugly::IndexBuffer> indexBuffer;
+        	indexBuffer.reset(Ugly::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
         	m_VertexArray->SetIndexBuffer(indexBuffer);
 
-        	m_SquareVA.reset(UglyEngine::VertexArray::Create());
+        	m_SquareVA.reset(Ugly::VertexArray::Create());
 
         	float squareVertices[3 * 4] = {
         	   -0.5f,-0.5f, 0.0f,
@@ -41,16 +41,16 @@ class ExampleLayer : public UglyEngine::Layer
         	   -0.5f, 0.5f, 0.0f
         	};
 
-        	std::shared_ptr<UglyEngine::VertexBuffer> squareVB; 
-        	squareVB.reset(UglyEngine::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+            Ugly::Ref<Ugly::VertexBuffer> squareVB; 
+        	squareVB.reset(Ugly::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 			squareVB->SetLayout({
-        	    { UglyEngine::ShaderDataType::Float3, "a_Position" }
+        	    { Ugly::ShaderDataType::Float3, "a_Position" }
 			});
         	m_SquareVA->AddVertexBuffer(squareVB);
 
         	uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-        	std::shared_ptr<UglyEngine::IndexBuffer> squareIB;
-        	squareIB.reset(UglyEngine::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+            Ugly::Ref<Ugly::IndexBuffer> squareIB;
+        	squareIB.reset(Ugly::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
         	m_SquareVA->SetIndexBuffer(squareIB);
 			
 
@@ -89,7 +89,7 @@ class ExampleLayer : public UglyEngine::Layer
         	    }
         	)";
 
-        	m_Shader.reset(UglyEngine::Shader::Create(vertexSrc, fragmentSrc));
+        	m_Shader.reset(Ugly::Shader::Create(vertexSrc, fragmentSrc));
 
         	std::string vertexSrc2 = R"(
         	    #version 330 core
@@ -123,64 +123,64 @@ class ExampleLayer : public UglyEngine::Layer
         	    }
         	)";
 
-        	flatColorShader.reset(UglyEngine::Shader::Create(vertexSrc2, flatColorShaderFragmentSrc));
+        	flatColorShader.reset(Ugly::Shader::Create(vertexSrc2, flatColorShaderFragmentSrc));
         }
 
-        void OnUpdate(UglyEngine::Timestep ts) override
+        void OnUpdate(Ugly::Timestep ts) override
         {
-			if (UglyEngine::Input::IsKeyPressed(UE_KEY_LEFT))
+			if (Ugly::Input::IsKeyPressed(UE_KEY_LEFT))
 				m_CameraPosition.x -= m_CameraMoveSpeed * ts;
-			else if (UglyEngine::Input::IsKeyPressed(UE_KEY_RIGHT))
+			else if (Ugly::Input::IsKeyPressed(UE_KEY_RIGHT))
 				m_CameraPosition.x += m_CameraMoveSpeed * ts;
 
-			if (UglyEngine::Input::IsKeyPressed(UE_KEY_UP))
+			if (Ugly::Input::IsKeyPressed(UE_KEY_UP))
 				m_CameraPosition.y += m_CameraMoveSpeed * ts;
-			else if (UglyEngine::Input::IsKeyPressed(UE_KEY_DOWN))
+			else if (Ugly::Input::IsKeyPressed(UE_KEY_DOWN))
 				m_CameraPosition.y -= m_CameraMoveSpeed * ts;
 
-			if (UglyEngine::Input::IsKeyPressed(UE_KEY_H))
+			if (Ugly::Input::IsKeyPressed(UE_KEY_H))
 				m_SquarePosition.x -= m_SquareMoveSpeed * ts;
-			else if (UglyEngine::Input::IsKeyPressed(UE_KEY_L))
+			else if (Ugly::Input::IsKeyPressed(UE_KEY_L))
 				m_SquarePosition.x += m_SquareMoveSpeed * ts;
 
-			if (UglyEngine::Input::IsKeyPressed(UE_KEY_K))
+			if (Ugly::Input::IsKeyPressed(UE_KEY_K))
 				m_SquarePosition.y += m_SquareMoveSpeed * ts;
-			else if (UglyEngine::Input::IsKeyPressed(UE_KEY_J))
+			else if (Ugly::Input::IsKeyPressed(UE_KEY_J))
 				m_SquarePosition.y -= m_SquareMoveSpeed * ts;
 
-			if (UglyEngine::Input::IsKeyPressed(UE_KEY_A))
+			if (Ugly::Input::IsKeyPressed(UE_KEY_A))
 				m_CameraRotation += m_CameraRotationSpeed * ts;
 
-			if (UglyEngine::Input::IsKeyPressed(UE_KEY_D))
+			if (Ugly::Input::IsKeyPressed(UE_KEY_D))
 				m_CameraRotation -= m_CameraRotationSpeed * ts;
 
 
-			UglyEngine::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-			UglyEngine::RenderCommand::Clear();
+			Ugly::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+			Ugly::RenderCommand::Clear();
 
             m_Camera.SetPosition(m_CameraPosition);
             m_Camera.SetRotation(m_CameraRotation);
 
-            UglyEngine::Renderer::BeginScene(m_Camera);
+            Ugly::Renderer::BeginScene(m_Camera);
 
 			glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-            std::dynamic_pointer_cast<UglyEngine::OpenGLShader>(flatColorShader)->Bind();
-            std::dynamic_pointer_cast<UglyEngine::OpenGLShader>(flatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
+            std::dynamic_pointer_cast<Ugly::OpenGLShader>(flatColorShader)->Bind();
+            std::dynamic_pointer_cast<Ugly::OpenGLShader>(flatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
 
 			for(int y=0; y < 20; y++){
 				for(int x=0; x < 20; x++)
 				{
 					glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
 					glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-            		UglyEngine::Renderer::Submit(flatColorShader, m_SquareVA, transform);
+            		Ugly::Renderer::Submit(flatColorShader, m_SquareVA, transform);
 				}
 			}
 
 			//glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_SquarePosition);
-            //UglyEngine::Renderer::Submit(flatColorShader, m_SquareVA, transform);
-			UglyEngine::Renderer::Submit(m_Shader, m_VertexArray);
-            UglyEngine::Renderer::EndScene();
+            //Ugly::Renderer::Submit(flatColorShader, m_SquareVA, transform);
+			Ugly::Renderer::Submit(m_Shader, m_VertexArray);
+            Ugly::Renderer::EndScene();
 
         }
 
@@ -191,25 +191,25 @@ class ExampleLayer : public UglyEngine::Layer
             ImGui::End();
         }
 
-        void OnEvent(UglyEngine::Event& event) override
+        void OnEvent(Ugly::Event& event) override
         {
             /*
-            if(event.GetEventType() == UglyEngine::EventType::KeyPressed)
+            if(event.GetEventType() == Ugly::EventType::KeyPressed)
             {
-                UglyEngine::KeyPressedEvent& e = (UglyEngine::KeyPressedEvent&)event;
+                Ugly::KeyPressedEvent& e = (Ugly::KeyPressedEvent&)event;
                 UE_TRACE("{0}", (char)e.GetKeyCode());
             }
             */
         }
 		
 	private:
-        std::shared_ptr<UglyEngine::Shader> m_Shader;
-        std::shared_ptr<UglyEngine::VertexArray> m_VertexArray;
+        Ugly::Ref<Ugly::Shader> m_Shader;
+        Ugly::Ref<Ugly::VertexArray> m_VertexArray;
 
-        std::shared_ptr<UglyEngine::Shader> flatColorShader;
-        std::shared_ptr<UglyEngine::VertexArray> m_SquareVA;
+        Ugly::Ref<Ugly::Shader> flatColorShader;
+        Ugly::Ref<Ugly::VertexArray> m_SquareVA;
 
-		UglyEngine::OrthographicCamera m_Camera;
+		Ugly::OrthographicCamera m_Camera;
 		glm::vec3 m_CameraPosition;
 		float m_CameraMoveSpeed = 5.0f;
 
@@ -222,7 +222,7 @@ class ExampleLayer : public UglyEngine::Layer
         glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 };
 
-class Sandbox : public UglyEngine::Application
+class Sandbox : public Ugly::Application
 {
 public:
     Sandbox()
@@ -234,7 +234,7 @@ public:
     }
 };
 
-UglyEngine::Application* UglyEngine::CreateApplication()
+Ugly::Application* Ugly::CreateApplication()
 {
     return new Sandbox();
 }

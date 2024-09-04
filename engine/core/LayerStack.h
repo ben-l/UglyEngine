@@ -4,7 +4,7 @@
 #include <Layer.h>
 #include <vector>
 
-namespace UglyEngine {
+namespace Ugly {
     class UGLY_ENGINE_API LayerStack
     {
        public:

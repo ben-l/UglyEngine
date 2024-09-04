@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 
-namespace UglyEngine {
+namespace Ugly {
 
     // VERTEX BUFFER
     OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)

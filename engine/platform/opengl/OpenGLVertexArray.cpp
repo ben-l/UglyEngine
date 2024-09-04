@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 
-namespace UglyEngine {
+namespace Ugly {
 
     static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type){
         switch (type){
@@ -42,7 +42,7 @@ namespace UglyEngine {
         glBindVertexArray(0);
     }
 
-    void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+    void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
     {
         UE_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
         glBindVertexArray(m_RendererID);
@@ -63,7 +63,7 @@ namespace UglyEngine {
         m_VertexBuffers.push_back(vertexBuffer);
     }
 
-    void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+    void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
     {
         glBindVertexArray(m_RendererID);
         indexBuffer->Bind();

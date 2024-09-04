@@ -4,7 +4,7 @@
 #include <KeyEvent.h>
 #include <MouseEvent.h>
 
-namespace UglyEngine {
+namespace Ugly {
     class UGLY_ENGINE_API ImGuiLayer : public Layer {
         public:
             ImGuiLayer();

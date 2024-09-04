@@ -1,7 +1,7 @@
 #pragma once
 #include <Core.h>
 
-namespace UglyEngine{
+namespace Ugly{
     class UGLY_ENGINE_API Input {
         public:
             inline static bool IsKeyPressed(int keycode) { 

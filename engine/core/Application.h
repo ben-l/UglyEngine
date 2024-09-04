@@ -11,7 +11,7 @@
 
 #include <ImGuiLayer.h>
 
-namespace UglyEngine {
+namespace Ugly {
     class Application
     {
         public:

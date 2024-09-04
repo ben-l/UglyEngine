@@ -3,7 +3,7 @@
 
 struct GLFWwindow;
 
-namespace UglyEngine {
+namespace Ugly {
     class OpenGLContext : public GraphicsContext {
         public:
             OpenGLContext(GLFWwindow* windowHandle);

@@ -3,7 +3,7 @@
 #include <Event.h>
 #include <sstream>
 
-namespace UglyEngine {
+namespace Ugly {
     class UGLY_ENGINE_API MouseMovedEvent : public Event {
         public:
             MouseMovedEvent(float x, float y) : m_MouseX(x), m_MouseY(y) {}

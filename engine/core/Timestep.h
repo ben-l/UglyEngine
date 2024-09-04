@@ -1,6 +1,6 @@
 #pragma once
 
-namespace UglyEngine {
+namespace Ugly {
     class Timestep
     {
         public:
