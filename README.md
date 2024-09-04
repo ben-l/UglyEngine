@@ -1,6 +1,6 @@
 # Ugly Engine
 
-An early stage rendering engine - Linux support only
+An early stage OpenGL rendering engine - Linux support only
 
 ## Setup
 

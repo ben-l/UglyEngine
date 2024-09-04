@@ -9,9 +9,11 @@ file(GLOB
 	core/*.cpp
 	imgui/*.cpp
 	vendor/imgui/*.cpp
+    vendor/stb_image/*.cpp
 	platform/linux/*.cpp
-        platform/opengl/*.cpp
+    platform/opengl/*.cpp
 	renderer/*.cpp
+    vendor/l
 )
 
 add_library(test STATIC ${SOURCES})

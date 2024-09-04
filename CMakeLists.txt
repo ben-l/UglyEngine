@@ -16,6 +16,7 @@ include_directories(
 		engine/vendor/imgui
 		engine/vendor/imgui/backends
 		engine/vendor/glm/glm
+        engine/vendor/stb_image
 		engine/platform/linux
 		engine/platform/opengl
 )
