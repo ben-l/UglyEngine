@@ -92,6 +92,7 @@ class ExampleLayer : public Ugly::Layer
 
         	m_Shader.reset(Ugly::Shader::Create(vertexSrc, fragmentSrc));
 
+
         	std::string flatColorShaderVertexSrc = R"(
         	    #version 330 core
 
@@ -159,7 +160,7 @@ class ExampleLayer : public Ugly::Layer
         	    }
         	)";
 
-        	m_TextureShader.reset(Ugly::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
+        	m_TextureShader.reset(Ugly::Shader::Create("assets/shaders/Texture.glsl"));
 
         	m_Texture = Ugly::Texture2D::Create("assets/textures/Checkerboard.jpg");
 
