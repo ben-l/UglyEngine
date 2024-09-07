@@ -1,8 +1,10 @@
 #include <UglyEngine.h>
 #include <OpenGLShader.h>
 #include <imgui.h>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
 
 class ExampleLayer : public Ugly::Layer
 {
@@ -90,7 +92,7 @@ class ExampleLayer : public Ugly::Layer
         	    }
         	)";
 
-        	m_Shader.reset(Ugly::Shader::Create(vertexSrc, fragmentSrc));
+        	m_Shader = Ugly::Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
 
 
         	std::string flatColorShaderVertexSrc = R"(
@@ -125,7 +127,6 @@ class ExampleLayer : public Ugly::Layer
         	    }
         	)";
 
-        	flatColorShader.reset(Ugly::Shader::Create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
         	std::string textureShaderVertexSrc = R"(
         	    #version 330 core
 
@@ -160,12 +161,14 @@ class ExampleLayer : public Ugly::Layer
         	    }
         	)";
 
-        	m_TextureShader.reset(Ugly::Shader::Create("assets/shaders/Texture.glsl"));
+        	flatColorShader = Ugly::Shader::Create("FlatColor", flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
+
+        	auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 
         	m_Texture = Ugly::Texture2D::Create("assets/textures/Checkerboard.jpg");
 
-            std::dynamic_pointer_cast<Ugly::OpenGLShader>(m_TextureShader)->Bind();
-            std::dynamic_pointer_cast<Ugly::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+            std::dynamic_pointer_cast<Ugly::OpenGLShader>(textureShader)->Bind();
+            std::dynamic_pointer_cast<Ugly::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
         }
 
         void OnUpdate(Ugly::Timestep ts) override
@@ -220,9 +223,10 @@ class ExampleLayer : public Ugly::Layer
 				}
 			}
 
-            m_Texture->Bind();
+            auto textureShader = m_ShaderLibrary.Get("Texture");
 
-            Ugly::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+            m_Texture->Bind();
+            Ugly::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
             // Triangle
 			// Ugly::Renderer::Submit(m_Shader, m_VertexArray);
@@ -249,10 +253,11 @@ class ExampleLayer : public Ugly::Layer
         }
 		
 	private:
+        Ugly::ShaderLibrary m_ShaderLibrary;
         Ugly::Ref<Ugly::Shader> m_Shader;
         Ugly::Ref<Ugly::VertexArray> m_VertexArray;
 
-        Ugly::Ref<Ugly::Shader> flatColorShader, m_TextureShader;
+        Ugly::Ref<Ugly::Shader> flatColorShader;
         Ugly::Ref<Ugly::VertexArray> m_SquareVA;
 
         Ugly::Ref<Ugly::Texture2D> m_Texture;
