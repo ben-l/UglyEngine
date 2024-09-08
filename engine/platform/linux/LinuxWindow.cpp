@@ -70,6 +70,7 @@ namespace Ugly {
             data.Height = height;
 
             WindowResizeEvent event(width, height);
+            UE_CORE_WARN("{0}, {1}", width, height);
             data.EventCallback(event);
         });
 
