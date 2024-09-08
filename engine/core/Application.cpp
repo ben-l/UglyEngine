@@ -3,6 +3,7 @@
 
 #include <Log.h>
 #include <Renderer.h>
+#include <Renderer2d.h>
 
 #include <Input.h>
 #include <GLFW/glfw3.h>
@@ -22,6 +23,7 @@ namespace Ugly {
         m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
         Renderer::Init();
+        Renderer2d::Init();
 
         m_ImGuiLayer =  new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
