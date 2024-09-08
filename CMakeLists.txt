@@ -19,6 +19,7 @@ include_directories(
         engine/vendor/stb_image
 		engine/platform/linux
 		engine/platform/opengl
+        sandbox/src
 )
 
 add_subdirectory(engine)

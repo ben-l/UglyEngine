@@ -23,7 +23,3 @@
 //
 
 #include <OrthographicCamera.h>
-
-// Entry Point
-#include <EntryPoint.h>
-//

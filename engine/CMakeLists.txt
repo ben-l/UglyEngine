@@ -13,7 +13,6 @@ file(GLOB
 	platform/linux/*.cpp
     platform/opengl/*.cpp
 	renderer/*.cpp
-    vendor/l
 )
 
 add_library(test STATIC ${SOURCES})
