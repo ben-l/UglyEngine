@@ -10,7 +10,7 @@ class ExampleLayer : public Ugly::Layer
 {
     public:
         ExampleLayer()
-			: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f), m_SquarePosition(0.0f)
+			: Layer("Example"), m_CameraController(1280.0f / 720.0f)
         {
         	m_VertexArray.reset(Ugly::VertexArray::Create());
 
@@ -173,40 +173,15 @@ class ExampleLayer : public Ugly::Layer
 
         void OnUpdate(Ugly::Timestep ts) override
         {
-			if (Ugly::Input::IsKeyPressed(UE_KEY_LEFT))
-				m_CameraPosition.x -= m_CameraMoveSpeed * ts;
-			else if (Ugly::Input::IsKeyPressed(UE_KEY_RIGHT))
-				m_CameraPosition.x += m_CameraMoveSpeed * ts;
 
-			if (Ugly::Input::IsKeyPressed(UE_KEY_UP))
-				m_CameraPosition.y += m_CameraMoveSpeed * ts;
-			else if (Ugly::Input::IsKeyPressed(UE_KEY_DOWN))
-				m_CameraPosition.y -= m_CameraMoveSpeed * ts;
+            // Update
+            m_CameraController.OnUpdate(ts);
 
-			if (Ugly::Input::IsKeyPressed(UE_KEY_H))
-				m_SquarePosition.x -= m_SquareMoveSpeed * ts;
-			else if (Ugly::Input::IsKeyPressed(UE_KEY_L))
-				m_SquarePosition.x += m_SquareMoveSpeed * ts;
-
-			if (Ugly::Input::IsKeyPressed(UE_KEY_K))
-				m_SquarePosition.y += m_SquareMoveSpeed * ts;
-			else if (Ugly::Input::IsKeyPressed(UE_KEY_J))
-				m_SquarePosition.y -= m_SquareMoveSpeed * ts;
-
-			if (Ugly::Input::IsKeyPressed(UE_KEY_A))
-				m_CameraRotation += m_CameraRotationSpeed * ts;
-
-			if (Ugly::Input::IsKeyPressed(UE_KEY_D))
-				m_CameraRotation -= m_CameraRotationSpeed * ts;
-
-
+            // Render
 			Ugly::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 			Ugly::RenderCommand::Clear();
 
-            m_Camera.SetPosition(m_CameraPosition);
-            m_Camera.SetRotation(m_CameraRotation);
-
-            Ugly::Renderer::BeginScene(m_Camera);
+            Ugly::Renderer::BeginScene(m_CameraController.GetCamera());
 
 
 			glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
@@ -241,15 +216,9 @@ class ExampleLayer : public Ugly::Layer
             ImGui::End();
         }
 
-        void OnEvent(Ugly::Event& event) override
+        void OnEvent(Ugly::Event& e) override
         {
-            /*
-            if(event.GetEventType() == Ugly::EventType::KeyPressed)
-            {
-                Ugly::KeyPressedEvent& e = (Ugly::KeyPressedEvent&)event;
-                UE_TRACE("{0}", (char)e.GetKeyCode());
-            }
-            */
+            m_CameraController.OnEvent(e);
         }
 		
 	private:
@@ -262,16 +231,7 @@ class ExampleLayer : public Ugly::Layer
 
         Ugly::Ref<Ugly::Texture2D> m_Texture;
 
-		Ugly::OrthographicCamera m_Camera;
-		glm::vec3 m_CameraPosition;
-		float m_CameraMoveSpeed = 5.0f;
-
-		float m_CameraRotation = 0.0f;
-		float m_CameraRotationSpeed = 180.0f;
-
-		glm::vec3 m_SquarePosition;
-		float m_SquareMoveSpeed = 3.0f;
-
+		Ugly::OrthographicCameraController m_CameraController;
         glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 };
 
