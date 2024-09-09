@@ -169,7 +169,7 @@ class ExampleLayer : public Ugly::Layer
 
         	auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 
-        	m_Texture = Ugly::Texture2D::Create("assets/textures/Checkerboard.jpg");
+        	m_Texture = Ugly::Texture2d::Create("assets/textures/Checkerboard.jpg");
 
             std::dynamic_pointer_cast<Ugly::OpenGLShader>(textureShader)->Bind();
             std::dynamic_pointer_cast<Ugly::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
@@ -233,7 +233,7 @@ class ExampleLayer : public Ugly::Layer
         Ugly::Ref<Ugly::Shader> flatColorShader;
         Ugly::Ref<Ugly::VertexArray> m_SquareVA;
 
-        Ugly::Ref<Ugly::Texture2D> m_Texture;
+        Ugly::Ref<Ugly::Texture2d> m_Texture;
 
 		Ugly::OrthographicCameraController m_CameraController;
         glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };

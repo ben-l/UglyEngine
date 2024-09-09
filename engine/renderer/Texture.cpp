@@ -4,7 +4,7 @@
 #include "OpenGLTexture.h"
 
 namespace Ugly {
-    Ref<Texture2D> Texture2D::Create(const std::string& path){
+    Ref<Texture2d> Texture2d::Create(const std::string& path){
 
         switch (Renderer::GetAPI())
         {

@@ -4,7 +4,7 @@
 
 namespace Ugly {
 
-    class OpenGLTexture2D : public Texture2D{
+    class OpenGLTexture2D : public Texture2d {
         public:
             OpenGLTexture2D(const std::string& path);
             virtual ~OpenGLTexture2D();

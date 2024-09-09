@@ -9,7 +9,6 @@ uniform mat4 u_Transform;
 
 out vec2 v_TexCoord;
 
-
 void main()
 {
     v_TexCoord = a_TexCoord;

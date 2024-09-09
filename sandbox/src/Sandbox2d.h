@@ -18,5 +18,7 @@ class Sandbox2d : public Ugly::Layer {
         Ugly::Ref<Ugly::VertexArray> m_SquareVA;
         Ugly::Ref<Ugly::Shader> m_FlatColorShader;
 
+        Ugly::Ref<Ugly::Texture2d> m_CheckerboardTexture;
+
         glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 };
