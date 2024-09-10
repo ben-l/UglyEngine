@@ -8,12 +8,14 @@ Sandbox2d::Sandbox2d() : Layer("Sandbox2d"), m_CameraController(1280.0f / 720.0f
 {
 }
 
-void Sandbox2d::OnAttach(){
+void Sandbox2d::OnAttach()
+{
+    UE_PROFILE_FUNCTION();
     m_CheckerboardTexture = Ugly::Texture2d::Create("assets/textures/Checkerboard.jpg");
-
 }
 
 void Sandbox2d::OnDetach(){
+    UE_PROFILE_FUNCTION();
 }
 
 void Sandbox2d::OnUpdate(Ugly::Timestep ts){
@@ -21,10 +23,7 @@ void Sandbox2d::OnUpdate(Ugly::Timestep ts){
     UE_PROFILE_FUNCTION();
 
     // Update
-    {
-        UE_PROFILE_SCOPE("CameraController::OnUpdate");
-        m_CameraController.OnUpdate(ts);
-    }
+    m_CameraController.OnUpdate(ts);
 
     // Render
     {

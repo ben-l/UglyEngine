@@ -16,6 +16,8 @@ namespace Ugly {
 
     Application::Application()
     {
+        UE_PROFILE_FUNCTION();
+
         UE_CORE_ASSERT(!s_Instance, "Application already exists!");
         s_Instance = this;
 
@@ -30,17 +32,22 @@ namespace Ugly {
 
     }
     
-    void Application::PushLayer(Layer* layer){
+    void Application::PushLayer(Layer* layer)
+    {
+        UE_PROFILE_FUNCTION();
         m_LayerStack.PushLayer(layer);
-        //layer->OnAttach();
+        layer->OnAttach();
     }
 
-    void Application::PushOverlay(Layer* layer){
+    void Application::PushOverlay(Layer* layer)
+    {
+        UE_PROFILE_FUNCTION();
         m_LayerStack.PushOverlay(layer);
-        //layer->OnAttach();
+        layer->OnAttach();
     }
 
     void Application::OnEvent(Event& e){
+        UE_PROFILE_FUNCTION();
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
         dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
@@ -55,23 +62,36 @@ namespace Ugly {
 
     void Application::Run()
     {
+        UE_PROFILE_FUNCTION();
+
         while (m_Running)
         {
+            UE_PROFILE_SCOPE("RunLoop");
+
             float time = (float)glfwGetTime();
             Timestep timestep = time - m_LastFrameTime;
             m_LastFrameTime = time;
 
-            if (!m_Minimized) {
-                for(Layer* layer : m_LayerStack)
-                    layer->OnUpdate(timestep);
+            if (!m_Minimized) 
+            {
+                {
+                    UE_PROFILE_SCOPE("LayerStack OnUpdate");
+
+                    for(Layer* layer : m_LayerStack)
+                        layer->OnUpdate(timestep);
+                }
+
+                m_ImGuiLayer->Begin();
+                {
+                    UE_PROFILE_SCOPE("LayerStack OnImGuiRender");
+                    for (Layer* layer : m_LayerStack)
+                        layer->OnImGuiRender();
+                    m_ImGuiLayer->End();
+                }
+
+                m_Window->OnUpdate();
             }
 
-            m_ImGuiLayer->Begin();
-            for (Layer* layer : m_LayerStack)
-                layer->OnImGuiRender();
-            m_ImGuiLayer->End();
-
-            m_Window->OnUpdate();
         }
     }
 
@@ -83,6 +103,8 @@ namespace Ugly {
 
     bool Application::OnWindowResize(WindowResizeEvent& e)
     {
+        UE_PROFILE_FUNCTION();
+
         if (e.GetWidth() == 0 || e.GetHeight() == 0){
             m_Minimized = true;
             return false;

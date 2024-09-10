@@ -14,6 +14,8 @@ namespace Ugly {
 
     void OpenGLContext::Init()
     {
+        UE_PROFILE_FUNCTION();
+
         glfwMakeContextCurrent(m_WindowHandle);
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         UE_CORE_ASSERT(status, "Failed to initialize Glad!");
@@ -25,6 +27,7 @@ namespace Ugly {
 
     void OpenGLContext::SwapBuffers()
     {
+        UE_PROFILE_FUNCTION();
         glfwSwapBuffers(m_WindowHandle);
     }
 

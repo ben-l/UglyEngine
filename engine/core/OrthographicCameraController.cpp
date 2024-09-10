@@ -12,6 +12,8 @@ namespace Ugly {
 
     void OrthographicCameraController::OnUpdate(Timestep ts)
     {
+        UE_PROFILE_FUNCTION();
+
 		if (Input::IsKeyPressed(UE_KEY_S))
 			m_CameraPosition.x -= m_CameraTranslationSpeed * ts;
 		else if (Ugly::Input::IsKeyPressed(UE_KEY_F))
@@ -37,6 +39,7 @@ namespace Ugly {
 
     void OrthographicCameraController::OnEvent(Event& e)
     {
+        UE_PROFILE_FUNCTION();
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<MouseScrolledEvent>(UE_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
         dispatcher.Dispatch<WindowResizeEvent>(UE_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
@@ -44,6 +47,7 @@ namespace Ugly {
 
     bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
     {
+        UE_PROFILE_FUNCTION();
         m_ZoomLevel -= e.GetYOffset() * 0.25f;
         m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
         m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
@@ -52,6 +56,7 @@ namespace Ugly {
 
     bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
     {
+        UE_PROFILE_FUNCTION();
         m_AspectRatio -= (float)e.GetWidth() / (float)e.GetHeight();
         m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
         return false;

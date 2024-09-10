@@ -1,5 +1,6 @@
 #include <uepch.h>
 #include <Renderer.h>
+#include <Renderer2d.h>
 #include <OpenGLShader.h>
 
 namespace Ugly {
@@ -7,7 +8,9 @@ namespace Ugly {
     Renderer::SceneData* Renderer::s_SceneData = new Renderer::SceneData;
 
     void Renderer::Init(){
+        UE_PROFILE_FUNCTION();
 		RenderCommand::Init();
+        Renderer2d::Init();
     }
 
     void Renderer::OnWindowResize(uint32_t width, uint32_t height)

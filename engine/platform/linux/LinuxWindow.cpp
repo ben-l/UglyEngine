@@ -6,6 +6,8 @@
 #include <OpenGLContext.h>
 
 namespace Ugly {
+
+    static uint8_t s_GLFWWindowCount = 0;
     
     static bool s_GLFWInitialized = false;
     static void GLFWErrorCallback(int error, const char* description){
@@ -19,16 +21,21 @@ namespace Ugly {
  
     LinuxWindow::LinuxWindow(const WindowProps& props)
     {
+        UE_PROFILE_FUNCTION();
         Init(props);
     }
      
      
     LinuxWindow::~LinuxWindow()
     {
+        UE_PROFILE_FUNCTION();
         Shutdown();
     }
 
     void LinuxWindow::Init(const WindowProps& props){
+
+        UE_PROFILE_FUNCTION();
+
         m_Data.Title = props.Title;
         m_Data.Width = props.Width;
         m_Data.Height = props.Height;
@@ -153,7 +160,13 @@ namespace Ugly {
     }
 
     void LinuxWindow::Shutdown(){
+        UE_PROFILE_FUNCTION();
         glfwDestroyWindow(m_Window);
+        --s_GLFWWindowCount;
+
+        if (s_GLFWWindowCount == 0){
+            glfwTerminate();
+        }
     }
 
     void LinuxWindow::OnUpdate(){
@@ -162,6 +175,8 @@ namespace Ugly {
     }
 
     void LinuxWindow::SetVSync(bool enabled){
+        UE_PROFILE_FUNCTION();
+
         if(enabled)
             glfwSwapInterval(1);
         else
