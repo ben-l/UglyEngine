@@ -36,6 +36,7 @@ void Sandbox2d::OnUpdate(Ugly::Timestep ts){
         UE_PROFILE_SCOPE("Renderer_Draw");
         Ugly::Renderer2d::BeginScene(m_CameraController.GetCamera());
         //Ugly::Renderer2d::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+        //Ugly::Renderer2d::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
         Ugly::Renderer2d::DrawRotatedQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, -45.0f, { 0.0f, 0.0f, 0.0f, 1.0f });
         Ugly::Renderer2d::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
         //Ugly::Renderer2d::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_CheckerboardTexture, 10.0f);

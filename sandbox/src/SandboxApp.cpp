@@ -24,8 +24,8 @@ class ExampleLayer : public Ugly::Layer
         	    0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f 
         	};
 
-            Ugly::Ref<Ugly::VertexBuffer> vertexBuffer;
-        	vertexBuffer.reset(Ugly::VertexBuffer::Create(vertices, sizeof(vertices)));
+            Ugly::Ref<Ugly::VertexBuffer> vertexBuffer = Ugly::VertexBuffer::Create(vertices, sizeof(vertices));
+
 			Ugly::BufferLayout layout = {
         	    { Ugly::ShaderDataType::Float3, "a_Position" },
         	    { Ugly::ShaderDataType::Float4, "a_Color" }
@@ -34,8 +34,7 @@ class ExampleLayer : public Ugly::Layer
         	m_VertexArray->AddVertexBuffer(vertexBuffer);
 
         	uint32_t indices[3] = { 0, 1, 2 };
-            Ugly::Ref<Ugly::IndexBuffer> indexBuffer;
-        	indexBuffer.reset(Ugly::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+            Ugly::Ref<Ugly::IndexBuffer> indexBuffer = Ugly::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
         	m_VertexArray->SetIndexBuffer(indexBuffer);
 
         	m_SquareVA = Ugly::VertexArray::Create();
@@ -47,8 +46,7 @@ class ExampleLayer : public Ugly::Layer
         	   -0.5f, 0.5f, 0.0f, 0.0f, 1.0f
         	};
 
-            Ugly::Ref<Ugly::VertexBuffer> squareVB; 
-        	squareVB.reset(Ugly::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+            Ugly::Ref<Ugly::VertexBuffer> squareVB = Ugly::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 			squareVB->SetLayout({
         	    { Ugly::ShaderDataType::Float3, "a_Position" },
         	    { Ugly::ShaderDataType::Float2, "a_TexCoord" }
@@ -56,8 +54,7 @@ class ExampleLayer : public Ugly::Layer
         	m_SquareVA->AddVertexBuffer(squareVB);
 
         	uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-            Ugly::Ref<Ugly::IndexBuffer> squareIB;
-        	squareIB.reset(Ugly::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+            Ugly::Ref<Ugly::IndexBuffer> squareIB = Ugly::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
         	m_SquareVA->SetIndexBuffer(squareIB);
 			
 
