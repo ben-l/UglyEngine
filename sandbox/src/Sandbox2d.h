@@ -20,12 +20,5 @@ class Sandbox2d : public Ugly::Layer {
 
         Ugly::Ref<Ugly::Texture2d> m_CheckerboardTexture;
 
-        struct ProfileResult{
-            const char* Name;
-            float Time;
-        };
-
-        std::vector<ProfileResult> m_ProfileResults;
-
         glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 };

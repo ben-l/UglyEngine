@@ -40,6 +40,6 @@ namespace Ugly {
         private:
             static Application* s_Instance;
     };
-        // to be defined in client (sandboxapp)
-        Application* CreateApplication();
+    // to be defined in client (sandboxapp)
+    Application* CreateApplication();
 }
