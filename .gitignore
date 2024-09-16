@@ -47,6 +47,5 @@ _deps
 build
 .cache
 todo.txt
-**/textures/*
 
 [Bb][Uu][Ii][Ll][Dd]

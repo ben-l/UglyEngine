@@ -1,6 +1,4 @@
 #pragma once
-#include <string>
-#include <stdint.h>
 
 namespace Ugly {
 
@@ -8,7 +6,8 @@ namespace Ugly {
         None = 0, Float, Float2, Float3, Float4, Mat3, Mat4, Int, Int2, Int3, Int4, Bool 
     };
 
-    static uint32_t ShaderDataTypeSize(ShaderDataType type){
+    static uint32_t ShaderDataTypeSize(ShaderDataType type)
+    {
         switch(type)
         {
             case ShaderDataType::Float:     return 4;
@@ -34,7 +33,7 @@ namespace Ugly {
         uint32_t Offset;
         bool Normalized;
 
-        BufferElement() {}
+        BufferElement() = default;
 
         BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
             : Name(name), Type(type), Size(ShaderDataTypeSize(type)), Offset(0), Normalized(normalized)

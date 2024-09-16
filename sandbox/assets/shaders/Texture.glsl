@@ -16,23 +16,24 @@ out float v_TilingFactor;
 
 void main()
 {
-    v_Color = a_Color;
-    v_TexCoord = a_TexCoord;
-    v_TexIndex = a_TexIndex;
-    v_TilingFactor= a_TilingFactor;
-    gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
+	v_Color = a_Color;
+	v_TexCoord = a_TexCoord;
+	v_TexIndex = a_TexIndex;
+	v_TilingFactor = a_TilingFactor;
+	gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
 }
 
 #type fragment
 #version 330 core
 
-// Inputs
+layout(location = 0) out vec4 color;
+
 in vec4 v_Color;
 in vec2 v_TexCoord;
 in float v_TexIndex;
+in float v_TilingFactor;
 
-// Uniforms
-uniform sampler2D u_TextureSlots[16];
+uniform sampler2D u_Textures[32];
 
 // Outputs
 out vec4 o_FragColor;
@@ -43,22 +44,38 @@ void main () {
   int l_TexIndex = int(v_TexIndex);
 
   switch (l_TexIndex) {
-    case 0:  l_Texture = texture(u_TextureSlots[0],  v_TexCoord); break;
-    case 1:  l_Texture = texture(u_TextureSlots[1],  v_TexCoord); break;
-    case 2:  l_Texture = texture(u_TextureSlots[2],  v_TexCoord); break;
-    case 3:  l_Texture = texture(u_TextureSlots[3],  v_TexCoord); break;
-    case 4:  l_Texture = texture(u_TextureSlots[4],  v_TexCoord); break;
-    case 5:  l_Texture = texture(u_TextureSlots[5],  v_TexCoord); break;
-    case 6:  l_Texture = texture(u_TextureSlots[6],  v_TexCoord); break;
-    case 7:  l_Texture = texture(u_TextureSlots[7],  v_TexCoord); break;
-    case 8:  l_Texture = texture(u_TextureSlots[8],  v_TexCoord); break;
-    case 9:  l_Texture = texture(u_TextureSlots[9],  v_TexCoord); break;
-    case 10: l_Texture = texture(u_TextureSlots[10], v_TexCoord); break;
-    case 11: l_Texture = texture(u_TextureSlots[11], v_TexCoord); break;
-    case 12: l_Texture = texture(u_TextureSlots[12], v_TexCoord); break;
-    case 13: l_Texture = texture(u_TextureSlots[13], v_TexCoord); break;
-    case 14: l_Texture = texture(u_TextureSlots[14], v_TexCoord); break;
-    case 15: l_Texture = texture(u_TextureSlots[15], v_TexCoord); break;
+    case 0:  l_Texture = texture(u_Textures[0],  v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 1:  l_Texture = texture(u_Textures[1],  v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 2:  l_Texture = texture(u_Textures[2],  v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 3:  l_Texture = texture(u_Textures[3],  v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 4:  l_Texture = texture(u_Textures[4],  v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 5:  l_Texture = texture(u_Textures[5],  v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 6:  l_Texture = texture(u_Textures[6],  v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 7:  l_Texture = texture(u_Textures[7],  v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 8:  l_Texture = texture(u_Textures[8],  v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 9:  l_Texture = texture(u_Textures[9],  v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 10: l_Texture = texture(u_Textures[10], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 11: l_Texture = texture(u_Textures[11], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 12: l_Texture = texture(u_Textures[12], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 13: l_Texture = texture(u_Textures[13], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 14: l_Texture = texture(u_Textures[14], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 15: l_Texture = texture(u_Textures[15], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 16: l_Texture = texture(u_Textures[16], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 17: l_Texture = texture(u_Textures[17], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 18: l_Texture = texture(u_Textures[18], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 19: l_Texture = texture(u_Textures[19], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 20: l_Texture = texture(u_Textures[20], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 21: l_Texture = texture(u_Textures[21], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 22: l_Texture = texture(u_Textures[22], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 23: l_Texture = texture(u_Textures[23], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 24: l_Texture = texture(u_Textures[24], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 25: l_Texture = texture(u_Textures[25], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 26: l_Texture = texture(u_Textures[26], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 27: l_Texture = texture(u_Textures[27], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 28: l_Texture = texture(u_Textures[28], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 29: l_Texture = texture(u_Textures[29], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 30: l_Texture = texture(u_Textures[30], v_TexCoord * v_TilingFactor) * v_Color; break;
+    case 31: l_Texture = texture(u_Textures[31], v_TexCoord * v_TilingFactor) * v_Color; break;
   }
 
   o_FragColor = l_Texture * v_Color;

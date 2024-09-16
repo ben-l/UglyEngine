@@ -11,7 +11,7 @@ Sandbox2d::Sandbox2d() : Layer("Sandbox2d"), m_CameraController(1280.0f / 720.0f
 void Sandbox2d::OnAttach()
 {
     UE_PROFILE_FUNCTION();
-    m_CheckerboardTexture = Ugly::Texture2d::Create("assets/textures/Checkerboard.jpg");
+    m_CheckerboardTexture = Ugly::Texture2d::Create("assets/textures/Checkerboard.png");
 }
 
 void Sandbox2d::OnDetach(){
@@ -28,15 +28,17 @@ void Sandbox2d::OnUpdate(Ugly::Timestep ts){
     // Render
     {
         UE_PROFILE_SCOPE("Renderer_Prep");
-	    Ugly::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+	    Ugly::RenderCommand::SetClearColor({ 0.0f, 1.1f, 0.1f, 1 });
 	    Ugly::RenderCommand::Clear();
     }
 
     {
         UE_PROFILE_SCOPE("Renderer_Draw");
         Ugly::Renderer2d::BeginScene(m_CameraController.GetCamera());
-        Ugly::Renderer2d::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-		Ugly::Renderer2d::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+        //Hazel::Renderer2D::DrawRotatedQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(-45.0f), { 0.8f, 0.2f, 0.3f, 1.0f });
+		Ugly::Renderer2d::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.0f, 0.0f, 1.0f, 1.0f });
+		Ugly::Renderer2d::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 1.0f, 0.3f, 0.2f, 1.0f });
+		Ugly::Renderer2d::DrawQuad({ -5.0f, -5.0f, -0.1f }, { 10.0f, 10.0f }, m_CheckerboardTexture, 10.0f);
 		Ugly::Renderer2d::DrawQuad({ -0.5f, -0.5f, 0.0f }, { 1.0f, 1.0f }, m_CheckerboardTexture, 20.0f);
         Ugly::Renderer2d::EndScene();
     }

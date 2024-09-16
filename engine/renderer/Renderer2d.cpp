@@ -1,8 +1,9 @@
 #include "uepch.h"
 #include "Renderer2d.h"
+
 #include "VertexArray.h"
-#include "RenderCommand.h"
 #include "Shader.h"
+#include "RenderCommand.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -45,7 +46,7 @@ namespace Ugly {
         s_Data.QuadVertexArray = VertexArray::Create();
 
 
-        s_Data.QuadVertexBuffer =  VertexBuffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
+        s_Data.QuadVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
 
 	    s_Data.QuadVertexBuffer->SetLayout({
             { ShaderDataType::Float3, "a_Position" },
@@ -61,7 +62,7 @@ namespace Ugly {
         uint32_t* quadIndices = new uint32_t[s_Data.MaxIndices];
 
         uint32_t offset = 0;
-        for(uint32_t i = 0; i < s_Data.MaxIndices; i+= 6)
+        for(uint32_t i = 0; i < s_Data.MaxIndices; i += 6)
         {
             quadIndices[i + 0] = offset + 0;
             quadIndices[i + 1] = offset + 1;
@@ -119,14 +120,17 @@ namespace Ugly {
     void Renderer2d::EndScene()
     {
         UE_PROFILE_FUNCTION();
+
         uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
         s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
+
         Flush();
     }
+
     void Renderer2d::Flush()
     {
         // Bind textures
-        for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++ ){
+        for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++){
             s_Data.TextureSlots[i]->Bind(i);
         }
         RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
@@ -198,7 +202,8 @@ namespace Ugly {
         constexpr glm::vec4 color  = { 1.0f, 1.0f, 1.0f, 1.0f };
 
         float textureIndex = 0.0f;
-        for(uint32_t i = 1; i < s_Data.TextureSlotIndex; i++ ){
+        for(uint32_t i = 1; i < s_Data.TextureSlotIndex; i++)
+        {
             if (*s_Data.TextureSlots[i].get() == *texture.get())
             {
                 textureIndex = (float)i;
@@ -242,6 +247,19 @@ namespace Ugly {
         s_Data.QuadVertexBufferPtr++;
 
         s_Data.QuadIndexCount += 6;
+
+        s_Data.TextureShader->SetFloat4("u_Color", tintColor);
+		s_Data.TextureShader->SetFloat("u_TilingFactor", tilingFactor);
+		texture->Bind();
+
+#if OLD_PATH
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		s_Data.TextureShader->SetMat4("u_Transform", transform);
+
+		s_Data.QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
+#endif
     }
 
     void Renderer2d::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
