@@ -20,9 +20,17 @@ class Sandbox2d : public Ugly::Layer {
         Ugly::Ref<Ugly::Shader> m_FlatColorShader;
 
         Ugly::Ref<Ugly::Texture2d> m_CheckerboardTexture;
+        Ugly::Ref<Ugly::Texture2d> m_SpriteSheet;
+        Ugly::Ref<Ugly::SubTexture2d> m_TextureBrick;
+        Ugly::Ref<Ugly::SubTexture2d> m_TextureCrate;
+        Ugly::Ref<Ugly::SubTexture2d> m_TexturePlayer;
+
 
         glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 
         ParticleSystem m_ParticleSystem;
         ParticleProps m_Particle;
+
+        uint32_t m_MapWidth, m_MapHeight;
+        std::unordered_map<char, Ugly::Ref<Ugly::SubTexture2d>> s_TextureMap;
 };

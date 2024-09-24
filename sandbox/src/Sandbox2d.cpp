@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+
 Sandbox2d::Sandbox2d() : Layer("Sandbox2d"), m_CameraController(1280.0f / 720.0f), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
 {
 }
@@ -13,6 +14,7 @@ void Sandbox2d::OnAttach()
     UE_PROFILE_FUNCTION();
     m_CheckerboardTexture = Ugly::Texture2d::Create("assets/textures/Checkerboard.png");
 
+
     m_Particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	m_Particle.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
 	m_Particle.SizeBegin = 0.5f, m_Particle.SizeVariation = 0.3f, m_Particle.SizeEnd = 0.0f;
@@ -20,6 +22,9 @@ void Sandbox2d::OnAttach()
 	m_Particle.Velocity = { 0.0f, 0.0f };
 	m_Particle.VelocityVariation = { 3.0f, 1.0f };
 	m_Particle.Position = { 0.0f, 0.0f };
+
+    m_CameraController.SetZoomLevel(5.0f);
+
 }
 
 void Sandbox2d::OnDetach(){
@@ -40,7 +45,6 @@ void Sandbox2d::OnUpdate(Ugly::Timestep ts){
 	    Ugly::RenderCommand::SetClearColor({ 0.1f, 0.2f, 0.1f, 1 });
 	    Ugly::RenderCommand::Clear();
     }
-
     {
         static float rotation = 0.0f;
         rotation += ts * 50.0f;
@@ -85,6 +89,8 @@ void Sandbox2d::OnUpdate(Ugly::Timestep ts){
 
 	m_ParticleSystem.OnUpdate(ts);
 	m_ParticleSystem.OnRender(m_CameraController.GetCamera());
+
+    Ugly::Renderer2d::EndScene();
 
 }
 

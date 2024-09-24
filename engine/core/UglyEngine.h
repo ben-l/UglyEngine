@@ -20,6 +20,7 @@
 #include <Buffer.h>
 #include <Shader.h>
 #include <Texture.h>
+#include <SubTexture2d.h>
 #include <VertexArray.h>
 //
 
