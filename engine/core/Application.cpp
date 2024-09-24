@@ -46,6 +46,12 @@ namespace Ugly {
         layer->OnAttach();
     }
 
+    void Application::Close()
+    {
+        m_Running = false;
+
+    }
+
     void Application::OnEvent(Event& e){
         UE_PROFILE_FUNCTION();
         EventDispatcher dispatcher(e);
