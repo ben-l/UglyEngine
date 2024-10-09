@@ -24,6 +24,11 @@ void Sandbox2d::OnAttach()
 
     m_CameraController.SetZoomLevel(5.0f);
 
+    Ugly::FrameBufferSpecification fbSpec;
+    fbSpec.Width = 1280;
+    fbSpec.Height = 720;
+    m_FrameBuffer = Ugly::FrameBuffer::Create(fbSpec);
+
 }
 
 void Sandbox2d::OnDetach(){
@@ -41,6 +46,7 @@ void Sandbox2d::OnUpdate(Ugly::Timestep ts){
     Ugly::Renderer2d::ResetStats();
     {
         UE_PROFILE_SCOPE("Renderer_Prep");
+        m_FrameBuffer->Bind();
 	    Ugly::RenderCommand::SetClearColor({ 0.1f, 0.2f, 0.1f, 1 });
 	    Ugly::RenderCommand::Clear();
     }
@@ -90,6 +96,7 @@ void Sandbox2d::OnUpdate(Ugly::Timestep ts){
 	m_ParticleSystem.OnRender(m_CameraController.GetCamera());
 
     Ugly::Renderer2d::EndScene();
+    m_FrameBuffer->Unbind();
 
 }
 
@@ -179,8 +186,8 @@ void Sandbox2d::OnImGuiRender()
 
         ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
         
-        uint32_t textureID = m_CheckerboardTexture->GetRendererID();
-        ImGui::Image((void*)textureID, ImVec2{ 256.0f, 256.0f });
+        uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+        ImGui::Image((void*)textureID, ImVec2{ 1280.0f, 720.0f });
         ImGui::End();
         
         ImGui::End();
