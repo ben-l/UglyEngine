@@ -40,16 +40,20 @@ namespace Ugly {
         m_CameraTranslationSpeed = m_ZoomLevel;
     }
 
-    void OrthographicCameraController::OnEvent(Event& e)
-    {
+    void OrthographicCameraController::OnEvent(Event& e) {
         UE_PROFILE_FUNCTION();
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<MouseScrolledEvent>(UE_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
         dispatcher.Dispatch<WindowResizeEvent>(UE_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
     }
+
     void OrthographicCameraController::CalculateView(){
         m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
         m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
+    }
+    void OrthographicCameraController::OnResize(float width, float height){
+        m_AspectRatio = width / height;
+        m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
     }
 
     bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
@@ -65,9 +69,7 @@ namespace Ugly {
     bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
     {
         UE_PROFILE_FUNCTION();
-
-        m_AspectRatio -= (float)e.GetWidth() / (float)e.GetHeight();
-        CalculateView();
+        OnResize((float)e.GetWidth(), (float)e.GetHeight());
         return false;
     }
 }

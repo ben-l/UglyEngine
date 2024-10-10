@@ -79,8 +79,6 @@ namespace Ugly {
     {
         UE_PROFILE_FUNCTION();
     
-        static bool dockingEnabled = true;
-        if (dockingEnabled)
         {
             static bool dockspaceOpen = true;
             static bool opt_fullscreen = true;
@@ -161,27 +159,33 @@ namespace Ugly {
     
             ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
             
+            ImGui::End();
+
+
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});
+            ImGui::Begin("ViewPort");
+
+            m_ViewportFocused = ImGui::IsWindowFocused();
+		    m_ViewportHovered = ImGui::IsWindowHovered();
+		    Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+            ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+            m_ViewportSize = {viewportPanelSize.x, viewportPanelSize.y};
+            /*
+            if(m_ViewportSize != *((glm::vec2*)&viewportPanelSize)){
+                m_FrameBuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
+                m_CameraController.OnResize(viewportPanelSize.x, viewportPanelSize.y);
+            }
+            */
             uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
-            ImGui::Image((void*)textureID, ImVec2{ 1280.0f, 720.0f }, ImVec2{0,1},ImVec2{1, 0});
+            UE_WARN("Viewport size: {0}, {1}", viewportPanelSize.x, viewportPanelSize.y);
+
+            ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{0,1},ImVec2{1, 0});
+
             ImGui::End();
-            
+            ImGui::PopStyleVar();
+
             ImGui::End();
-        } else {
-            ImGui::Begin("Settings");
-            
-            auto stats = Renderer2d::GetStats();
-            ImGui::Text("Renderer2d Stats:");
-            ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-            ImGui::Text("Quads: %d", stats.QuadCount);
-            ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
-            ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-            
-            ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
-            
-            uint32_t textureID = m_CheckerboardTexture->GetRendererID();
-            ImGui::Image((void*)textureID, ImVec2{ 1280.0f, 720.0f }, ImVec2{0,1},ImVec2{1, 0});
-            ImGui::End();
-        }
+        } 
     }
     
     void EditorLayer::OnEvent(Event& e){
