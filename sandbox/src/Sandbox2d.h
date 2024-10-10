@@ -2,7 +2,6 @@
 
 #include "UglyEngine.h"
 #include "ParticleSystem.h"
-#include "FrameBuffer.h"
 
 class Sandbox2d : public Ugly::Layer {
     public:
@@ -19,13 +18,8 @@ class Sandbox2d : public Ugly::Layer {
         // Temp
         Ugly::Ref<Ugly::VertexArray> m_SquareVA;
         Ugly::Ref<Ugly::Shader> m_FlatColorShader;
-        Ugly::Ref<Ugly::FrameBuffer> m_FrameBuffer;
 
         Ugly::Ref<Ugly::Texture2d> m_CheckerboardTexture;
-        //Ugly::Ref<Ugly::Texture2d> m_SpriteSheet;
-        //Ugly::Ref<Ugly::SubTexture2d> m_TextureBrick;
-        //Ugly::Ref<Ugly::SubTexture2d> m_TextureCrate;
-        //Ugly::Ref<Ugly::SubTexture2d> m_TexturePlayer;
 
 
         glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };

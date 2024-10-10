@@ -21,7 +21,9 @@ include_directories(
     engine/platform/opengl
     engine/debug
     sandbox/src
+    UglyEd/src
 )
 
 add_subdirectory(engine)
 add_subdirectory(sandbox)
+add_subdirectory(UglyEd)

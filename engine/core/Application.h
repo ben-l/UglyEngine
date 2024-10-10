@@ -15,7 +15,7 @@ namespace Ugly {
     class Application
     {
         public:
-            Application();
+            Application(const std::string& name = "Ugly App");
             virtual ~Application() = default;
 
             void Run();
