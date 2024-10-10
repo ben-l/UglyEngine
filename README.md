@@ -22,9 +22,9 @@ Then create a build directory, generate the build system and compile:
     cmake ..
     make
 
-Once compiled, run the Sandbox executable:
+Once compiled, run the Ugly Editor executable:
 
-    ./sandbox/Sandbox
+    ./UglyEd/UglyEd
 
 ## Info
 
