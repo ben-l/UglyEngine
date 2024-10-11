@@ -34,7 +34,9 @@ namespace Ugly {
         UE_PROFILE_FUNCTION();
     
         // Update
-        m_CameraController.OnUpdate(ts);
+        if (m_ViewportFocused){
+            m_CameraController.OnUpdate(ts);
+        }
     
         // Render
         Renderer2d::ResetStats();

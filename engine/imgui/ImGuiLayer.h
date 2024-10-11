@@ -13,6 +13,8 @@ namespace Ugly {
             virtual void OnAttach() override;
             virtual void OnDetach() override;
 
+
+            void OnEvent(Event& e);
             void Begin();
             void End();
 
