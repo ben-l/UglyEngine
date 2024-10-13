@@ -5,6 +5,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 
+
+
 namespace Ugly {
 
     EditorLayer::EditorLayer() : Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
@@ -24,9 +26,12 @@ namespace Ugly {
         m_FrameBuffer = FrameBuffer::Create(fbSpec);
 
         m_ActiveScene = CreateRef<Scene>();
-        m_SquareEntity = m_ActiveScene->CreateEntity();
-        m_ActiveScene->Reg().emplace_or_replace<TransformComponent>(m_SquareEntity);
-        m_ActiveScene->Reg().emplace_or_replace<SpriteRendererComponent>(m_SquareEntity, glm::vec4{0.0f, 1.0f, 0.0f, 1.0f});
+
+        auto square = m_ActiveScene->CreateEntity("Green Square");
+
+        square.AddComponent<SpriteRendererComponent>(glm::vec4{0.0f, 1.0f, 0.0f, 1.0f});
+
+        m_SquareEntity = square;
     
     }
     
@@ -46,7 +51,7 @@ namespace Ugly {
         // Render
         Renderer2d::ResetStats();
         m_FrameBuffer->Bind();
-    	RenderCommand::SetClearColor({ 0.1f, 0.2f, 0.1f, 1 });
+    	RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
     	RenderCommand::Clear();
 
 
@@ -141,8 +146,13 @@ namespace Ugly {
             ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
             ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
     
-            auto& squareColor = m_ActiveScene->Reg().get<SpriteRendererComponent>(m_SquareEntity).Color;
-            ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+            if (m_SquareEntity){
+                ImGui::Separator();
+                auto& tag = m_SquareEntity.GetComponent<TagComponent>().Tag;
+                ImGui::Text("%s", tag.c_str());
+                auto& squareColor = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
+                ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+            }
             
             ImGui::End();
 
