@@ -13,11 +13,12 @@ file(GLOB
 	platform/linux/*.cpp
     platform/opengl/*.cpp
 	renderer/*.cpp
+    scene/*.cpp
 )
 
 add_library(test STATIC ${SOURCES})
 
-target_precompile_headers(test PRIVATE core/uepch.h)
+target_precompile_headers(test PRIVATE core/uepch.h vendor/entt/include/entt.hpp)
 
 target_compile_definitions(test PRIVATE 
         GLFW_INCLUDE_NONE 

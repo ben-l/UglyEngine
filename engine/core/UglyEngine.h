@@ -1,7 +1,6 @@
 #pragma once
 // for use by external bensengine applications
 #include <Application.h>
-#include <ImGuiLayer.h>
 #include <Layer.h>
 #include <Log.h>
 
@@ -11,6 +10,12 @@
 #include <KeyCodes.h>
 #include <MouseButtonCodes.h>
 #include <OrthographicCameraController.h>
+#include <ImGuiLayer.h>
+
+// Entities
+#include <Scene.h>
+#include <Components.h>
+
 
 // Renderer
 #include <Renderer.h>

@@ -10,6 +10,7 @@ include_directories(
     engine/events
     engine/imgui
     engine/renderer
+    engine/scene
     engine/vendor/glfw/include
     engine/vendor/glad/include
     engine/vendor/spdlog/include
@@ -17,6 +18,7 @@ include_directories(
     engine/vendor/imgui/backends
     engine/vendor/glm/glm
     engine/vendor/stb_image
+    engine/vendor/entt/include
     engine/platform/linux
     engine/platform/opengl
     engine/debug
