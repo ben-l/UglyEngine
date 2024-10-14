@@ -46,10 +46,37 @@ namespace Ugly {
     }
 
     void Scene::OnUpdate(Timestep ts){
-        auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-        for(auto entity : group){
-            const auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-            Renderer2d::DrawQuad(transform, sprite.Color);
+        Camera* mainCamera = nullptr;
+        glm::mat4* cameraTransform = nullptr;
+        // Render sprites
+        auto group = m_Registry.view<CameraComponent, TransformComponent>();
+        for (auto entity : group){
+            const auto& [camera, transform] = group.get<CameraComponent, TransformComponent>(entity);
+
+            // find main camera in the scene
+
+            if (camera.Primary){
+                mainCamera = &camera.Camera;
+                cameraTransform = &transform.Transform;
+                break;
+            }
+
         }
+
+        // if camera exists, do the rendering
+        if (mainCamera){
+            Renderer2d::BeginScene(mainCamera->GetProjection(), *cameraTransform);
+
+
+            auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+            for(auto entity : group){
+                const auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+                Renderer2d::DrawQuad(transform, sprite.Color);
+            }
+
+            Renderer2d::EndScene();
+
+        }
+
     }
 };

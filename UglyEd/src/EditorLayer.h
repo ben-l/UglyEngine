@@ -22,6 +22,12 @@ namespace Ugly {
 
             Ref<Scene> m_ActiveScene;
             Entity m_SquareEntity;
+            Entity m_CameraEntity;
+
+            Entity m_SecondCamera;
+
+            bool m_PrimaryCamera = true;
+
     
             Ref<Texture2d> m_CheckerboardTexture;
     
