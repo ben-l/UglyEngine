@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include "Camera.h"
+#include "SceneCamera.h"
 
 namespace Ugly {
     struct TagComponent {
@@ -29,12 +29,11 @@ namespace Ugly {
     };
     
     struct CameraComponent {
-        Ugly::Camera Camera;
+        SceneCamera Camera;
         bool Primary = true;
+        bool FixedAspectRatio = false;
 
         CameraComponent() = default;
         CameraComponent(const CameraComponent&) = default;
-        CameraComponent(const glm::mat4& projection)
-            : Camera(projection) {}
     };
 };
