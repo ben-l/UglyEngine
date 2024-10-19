@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include "SceneCamera.h"
+#include "ScriptableEntity.h"
 
 namespace Ugly {
     struct TagComponent {
@@ -36,4 +37,17 @@ namespace Ugly {
         CameraComponent() = default;
         CameraComponent(const CameraComponent&) = default;
     };
-};
+
+    struct NativeScriptComponent {
+        ScriptableEntity* Instance = nullptr;
+
+        ScriptableEntity*(*InstatiateScript)();
+        void(*DestroyScript)(NativeScriptComponent*);
+
+        template<typename T>
+        void Bind(){
+            InstatiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+            DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
+        }
+    };
+}

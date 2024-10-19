@@ -1,5 +1,6 @@
 #include "EditorLayer.h"
 #include <imgui.h>
+#include "Input.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -38,6 +39,36 @@ namespace Ugly {
         m_SecondCamera = m_ActiveScene->CreateEntity("Clip Space Camera");
         auto& cc = m_SecondCamera.AddComponent<CameraComponent>();
         cc.Primary = false;
+
+        class CameraController : public ScriptableEntity {
+            public:
+                void OnCreate(){
+                    auto& transform = GetComponent<TransformComponent>().Transform;
+                    transform[3][0] = rand() % 10 - 5.0f;
+                }
+                void OnDestroy(){
+                }
+
+                void OnUpdate(Timestep ts){
+                    float speed = 5.0f;
+                    auto& transform = GetComponent<TransformComponent>().Transform;
+
+                    if (Input::IsKeyPressed(UE_KEY_S)){
+                        transform[3][0] -= speed * ts;
+                    }
+                    if (Input::IsKeyPressed(UE_KEY_F)){
+                        transform[3][0] += speed * ts;
+                    }
+                    if (Input::IsKeyPressed(UE_KEY_E)){
+                        transform[3][1] += speed * ts;
+                    }
+                    if (Input::IsKeyPressed(UE_KEY_D)){
+                        transform[3][1] -= speed * ts;
+                    }
+                }
+        };
+        m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+        m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
     }
     
     void EditorLayer::OnDetach(){
@@ -172,7 +203,7 @@ namespace Ugly {
             ImGui::DragFloat3("Camera Transform", glm::value_ptr(
                 m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
 
-            if (ImGui::Checkbox("Primary Camera", &m_PrimaryCamera)){
+            if (ImGui::Checkbox("Camera A", &m_PrimaryCamera)){
                 m_CameraEntity.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
                 m_SecondCamera.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
             }

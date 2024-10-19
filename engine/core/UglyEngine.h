@@ -15,6 +15,7 @@
 // Entities
 #include <Scene.h>
 #include <Entity.h>
+#include <ScriptableEntity.h>
 #include <Components.h>
 
 

@@ -27,7 +27,6 @@ namespace Ugly {
             Entity m_SecondCamera;
 
             bool m_PrimaryCamera = true;
-
     
             Ref<Texture2d> m_CheckerboardTexture;
     
