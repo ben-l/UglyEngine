@@ -69,6 +69,8 @@ namespace Ugly {
         };
         m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
         m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
+        m_Panel.SetContext(m_ActiveScene);
     }
     
     void EditorLayer::OnDetach(){
@@ -182,6 +184,8 @@ namespace Ugly {
             
                 ImGui::EndMenuBar();
             }
+
+            m_Panel.OnImGuiRender();
             
             ImGui::Begin("Settings");
     

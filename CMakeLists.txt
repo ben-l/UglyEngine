@@ -24,6 +24,7 @@ include_directories(
     engine/debug
     sandbox/src
     UglyEd/src
+    UglyEd/src/Panels
 )
 
 add_subdirectory(engine)
