@@ -38,7 +38,7 @@ namespace Ugly {
         }
 
         Camera* mainCamera = nullptr;
-        glm::mat4* cameraTransform = nullptr;
+        glm::mat4 cameraTransform;
         // Render sprites
         auto view = m_Registry.view<CameraComponent, TransformComponent>();
         for (auto entity : view){
@@ -48,7 +48,7 @@ namespace Ugly {
 
             if (camera.Primary){
                 mainCamera = &camera.Camera;
-                cameraTransform = &transform.Transform;
+                cameraTransform = transform.GetTransform();
                 break;
             }
 
@@ -56,13 +56,13 @@ namespace Ugly {
 
         // if camera exists, do the rendering
         if (mainCamera){
-            Renderer2d::BeginScene(mainCamera->GetProjection(), *cameraTransform);
+            Renderer2d::BeginScene(mainCamera->GetProjection(), cameraTransform);
 
 
             auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
             for(auto entity : group){
                 const auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-                Renderer2d::DrawQuad(transform, sprite.Color);
+                Renderer2d::DrawQuad(transform.GetTransform(), sprite.Color);
             }
 
             Renderer2d::EndScene();
