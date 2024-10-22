@@ -28,13 +28,12 @@ namespace Ugly {
 
         m_ActiveScene = CreateRef<Scene>();
 
-        auto square = m_ActiveScene->CreateEntity("Green Square Entity");
-        square.AddComponent<SpriteRendererComponent>(glm::vec4{0.0f, 1.0f, 0.0f, 1.0f});
+        //auto m_SquareEntity = m_ActiveScene->CreateEntity("Green Square Entity");
+        //m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{0.0f, 1.0f, 0.0f, 1.0f});
 
-        auto redSquare = m_ActiveScene->CreateEntity("Red Square Entity");
-        redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{1.0f, 0.0f, 0.0f, 1.0f});
+        //auto redSquare = m_ActiveScene->CreateEntity("Red Square Entity");
+        //redSquare.AddComponent<SpriteRendererComponent>(glm::vec4{1.0f, 0.0f, 0.0f, 1.0f});
 
-        m_SquareEntity = square;
         m_CameraEntity = m_ActiveScene->CreateEntity("Camera A");
         m_CameraEntity.AddComponent<CameraComponent>();
     
