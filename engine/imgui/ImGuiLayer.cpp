@@ -36,6 +36,8 @@ namespace Ugly {
         //io.ConfigViewportsNoAutoMerge = true;
         //io.ConfigViewportsNoTaskBarIcon = true;
 
+        io.Fonts->AddFontFromFileTTF("assets/fonts/roboto/Roboto-Bold.ttf", 18.0f);
+        io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/roboto/Roboto-Regular.ttf", 18.0f);
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();
         //ImGui::StyleColorsClassic();
@@ -50,6 +52,8 @@ namespace Ugly {
             style.WindowRounding = 0.0f;
             style.Colors[ImGuiCol_WindowBg].w = 1.0f;
         }
+
+        SetDarkThemeColors();
 
         // Setup Platform/Renderer backends
         ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -100,6 +104,9 @@ namespace Ugly {
             ImGui::RenderPlatformWindowsDefault();
             glfwMakeContextCurrent(back_current_context);
         }
+    }
+
+    void ImGuiLayer::SetDarkThemeColors(){
     }
 
 }
