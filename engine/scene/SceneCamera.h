@@ -15,7 +15,7 @@ namespace Ugly {
             void SetViewportSize(uint32_t width, uint32_t height);
 
             float GetPerspectiveVerticalFOV() const { return m_PerspectiveFOV; }
-            void SetPersspectiveVerticalFOV(float verticalFOV) { m_PerspectiveFOV = verticalFOV; RecalculateProjection(); }
+            void SetPerspectiveVerticalFOV(float verticalFOV) { m_PerspectiveFOV = verticalFOV; RecalculateProjection(); }
             float GetPerspectiveNearClip() const { return m_PerspectiveNear; }
             void SetPerspectiveNearClip(float nearClip) { m_PerspectiveNear = nearClip; RecalculateProjection(); }
             float GetPerspectiveFarClip() const { return m_PerspectiveFar; }

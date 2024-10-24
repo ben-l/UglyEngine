@@ -11,3 +11,6 @@
 	path = engine/vendor/imgui
 	url = https://github.com/ocornut/imgui.git
 	branch = docking
+[submodule "engine/vendor/yaml-cpp"]
+	path = engine/vendor/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp.git

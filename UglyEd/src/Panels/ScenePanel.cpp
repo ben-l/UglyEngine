@@ -265,7 +265,7 @@ namespace Ugly {
             if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective){
                 float verticalFOV = glm::degrees(camera.GetPerspectiveVerticalFOV());
                 if (ImGui::DragFloat("Size", &verticalFOV)){
-                    camera.SetPersspectiveVerticalFOV(glm::radians(verticalFOV));
+                    camera.SetPerspectiveVerticalFOV(glm::radians(verticalFOV));
                 }
 
                 float persNear = camera.GetPerspectiveNearClip();

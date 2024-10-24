@@ -1,9 +1,11 @@
 #include "EditorLayer.h"
-#include <imgui.h>
 #include "Input.h"
+#include "SceneSerializer.h"
 
+#include <imgui.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
 
 
 
@@ -17,7 +19,6 @@ namespace Ugly {
     void EditorLayer::OnAttach()
     {
         UE_PROFILE_FUNCTION();
-        m_CheckerboardTexture = Texture2d::Create("assets/textures/Checkerboard.png");
     
         m_CameraController.SetZoomLevel(5.0f);
     
@@ -27,6 +28,8 @@ namespace Ugly {
         m_FrameBuffer = FrameBuffer::Create(fbSpec);
 
         m_ActiveScene = CreateRef<Scene>();
+
+#if 0
 
         //auto m_SquareEntity = m_ActiveScene->CreateEntity("Green Square Entity");
         //m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{0.0f, 1.0f, 0.0f, 1.0f});
@@ -70,8 +73,10 @@ namespace Ugly {
         };
         m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
         m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+#endif
 
         m_Panel.SetContext(m_ActiveScene);
+
     }
     
     void EditorLayer::OnDetach(){
@@ -182,7 +187,17 @@ namespace Ugly {
                     //ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
                     //ImGui::MenuItem("Padding", NULL, &opt_padding);
                     //ImGui::Separator();
+                    //
+                    if (ImGui::MenuItem("Serialize")){
+                        SceneSerializer serializer(m_ActiveScene);
+                        serializer.Serialize("assets/scenes/Example.ugly");
+                    }
             
+                    if (ImGui::MenuItem("Deserialize")){
+                        SceneSerializer serializer(m_ActiveScene);
+                        serializer.Deserialize("assets/scenes/Example.ugly");
+                    }
+
                     if (ImGui::MenuItem("Exit")) Application::Get().Close();
                     ImGui::EndMenu();
                 }

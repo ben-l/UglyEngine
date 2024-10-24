@@ -3,6 +3,7 @@ project(Engine)
 add_subdirectory(vendor/glfw)
 add_subdirectory(vendor/spdlog)
 add_subdirectory(vendor/glad)
+#add_subdirectory(vendor/yaml-cpp)
 
 file(GLOB
 	SOURCES CONFIGURE_DEPENDS
@@ -10,6 +11,7 @@ file(GLOB
 	imgui/*.cpp
 	vendor/imgui/*.cpp
     vendor/stb_image/*.cpp
+    vendor/yaml-cpp/src/*.cpp
 	platform/linux/*.cpp
     platform/opengl/*.cpp
 	renderer/*.cpp

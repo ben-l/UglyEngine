@@ -19,6 +19,7 @@ include_directories(
     engine/vendor/glm/glm
     engine/vendor/stb_image
     engine/vendor/entt/include
+    engine/vendor/yaml-cpp/include
     engine/platform/linux
     engine/platform/opengl
     engine/debug
