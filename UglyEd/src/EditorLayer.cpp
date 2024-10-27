@@ -1,6 +1,8 @@
 #include "EditorLayer.h"
 #include "Input.h"
 #include "SceneSerializer.h"
+#include "PlatformUtils.h"
+
 
 #include <imgui.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -19,8 +21,6 @@ namespace Ugly {
     void EditorLayer::OnAttach()
     {
         UE_PROFILE_FUNCTION();
-    
-        m_CameraController.SetZoomLevel(5.0f);
     
         FrameBufferSpecification fbSpec;
         fbSpec.Width = 1280;
@@ -109,7 +109,6 @@ namespace Ugly {
     	RenderCommand::Clear();
 
 
-        Renderer2d::BeginScene(m_CameraController.GetCamera());
         // Update Scene
         m_ActiveScene->OnUpdate(ts);
         Renderer2d::EndScene();
@@ -188,14 +187,16 @@ namespace Ugly {
                     //ImGui::MenuItem("Padding", NULL, &opt_padding);
                     //ImGui::Separator();
                     //
-                    if (ImGui::MenuItem("Serialize")){
-                        SceneSerializer serializer(m_ActiveScene);
-                        serializer.Serialize("assets/scenes/Example.ugly");
+                    if (ImGui::MenuItem("New", "Ctrl+Shift+N")){
+                        NewScene();
+                    }
+
+                    if (ImGui::MenuItem("Open...", "Ctrl+0")){
+                        OpenScene();
                     }
             
-                    if (ImGui::MenuItem("Deserialize")){
-                        SceneSerializer serializer(m_ActiveScene);
-                        serializer.Deserialize("assets/scenes/Example.ugly");
+                    if (ImGui::MenuItem("Save As...", "Ctrl+S")){
+                        SaveSceneAs();
                     }
 
                     if (ImGui::MenuItem("Exit")) Application::Get().Close();
@@ -247,6 +248,66 @@ namespace Ugly {
     
     void EditorLayer::OnEvent(Event& e){
         m_CameraController.OnEvent(e);
+        EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<Ugly::KeyPressedEvent>(UE_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+    }
+
+
+    bool EditorLayer::OnKeyPressed(KeyPressedEvent& e){
+        if (e.GetRepeatCount() > 0){
+            return false;
+        }
+        bool control = Input::IsKeyPressed(UE_KEY_LEFT_CONTROL) || Input::IsKeyPressed(UE_KEY_RIGHT_CONTROL);
+        bool shift = Input::IsKeyPressed(UE_KEY_LEFT_SHIFT) || Input::IsKeyPressed(UE_KEY_RIGHT_SHIFT);
+        switch(e.GetKeyCode()){
+            case UE_KEY_N:
+            {
+                if (control && shift){
+                    NewScene();
+                    break;
+                }
+            }
+            case UE_KEY_O:
+            {
+                if (control){
+                    OpenScene();
+                    break;
+                }
+            }
+            case UE_KEY_S:
+            {
+                if (control){
+                    SaveSceneAs();
+                    break;
+                }
+            }
+        }
+        return true;
+    }
+
+    void EditorLayer::NewScene(){
+        m_ActiveScene = CreateRef<Scene>();
+        m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+        m_Panel.SetContext(m_ActiveScene);
+    }
+
+    void EditorLayer::OpenScene(){
+        std::string filepath = FileDialogs::OpenFile("Ugly Scene (*.ugly)\0*.ugly\0");
+        if (!filepath.empty()){
+            m_ActiveScene = CreateRef<Scene>();
+            m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+            m_Panel.SetContext(m_ActiveScene);
+            SceneSerializer serializer(m_ActiveScene);
+            serializer.Deserialize(filepath);
+        }
+    }
+
+    void EditorLayer::SaveSceneAs(){
+        std::string filepath = FileDialogs::SaveFile("Ugly Scene (*.ugly)\0*.ugly\0");
+        if (!filepath.empty()){
+            SceneSerializer serializer(m_ActiveScene);
+            serializer.Serialize(filepath);
+        }
     }
 
 };

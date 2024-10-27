@@ -10,7 +10,7 @@ Essential installs for C/C++ & CMake on Debian based distros:
 
 Essential installs for OpenGL, glfw and glm on Debian based distros:
 
-    sudo apt install libgl-dev libglm-dev mesa-utils xorg-dev
+    sudo apt install libgl-dev libglm-dev mesa-utils xorg-dev libgtk-3-dev
 
 After cloning the repo, cd into it and pull in the submodule dependencies:
 

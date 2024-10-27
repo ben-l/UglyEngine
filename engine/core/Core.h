@@ -1,12 +1,11 @@
 #pragma once
 #include <memory>
 
-#ifdef __linux__ 
-    // not needed for static library
-    //#define UGLY_ENGINE_API __attribute__((visibility("default")))
+
+#ifdef __linux__
     #define UGLY_ENGINE_API
 #else
-#error Ugly only supports Linux!
+    #error "Ugly only supports Linux!"
 #endif
 
 #ifdef UE_DEBUG

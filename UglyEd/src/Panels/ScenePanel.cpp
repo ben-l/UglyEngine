@@ -15,6 +15,7 @@ namespace Ugly {
 
     void ScenePanel::SetContext(const Ref<Scene>& context){
         m_Context = context;
+        m_SelectionContext = {};
     }
 
     void ScenePanel::OnImGuiRender(){

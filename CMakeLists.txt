@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.19.2)
 set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set (CMAKE_BUILD_PARALLEL_LEVEL 8)
+set (GLFW_BUILD_WAYLAND 1)
+set (GLFW_BUILD_X11 1)
 
 project(UglyEngine)
 
@@ -20,6 +22,7 @@ include_directories(
     engine/vendor/stb_image
     engine/vendor/entt/include
     engine/vendor/yaml-cpp/include
+    engine/utils
     engine/platform/linux
     engine/platform/opengl
     engine/debug
