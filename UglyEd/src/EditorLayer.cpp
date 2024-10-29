@@ -1,15 +1,16 @@
 #include "EditorLayer.h"
 #include "Input.h"
+#include "Maths.h"
 #include "SceneSerializer.h"
 #include "PlatformUtils.h"
 
 
 #include <imgui.h>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
-
+#include <ImGuizmo.h>
 
 
 namespace Ugly {
@@ -28,6 +29,7 @@ namespace Ugly {
         m_FrameBuffer = FrameBuffer::Create(fbSpec);
 
         m_ActiveScene = CreateRef<Scene>();
+        m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
 #if 0
 
@@ -94,6 +96,7 @@ namespace Ugly {
 		{
 			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+            m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
             m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
@@ -101,6 +104,8 @@ namespace Ugly {
         if (m_ViewportFocused){
             m_CameraController.OnUpdate(ts);
         }
+        m_EditorCamera.OnUpdate(ts);
+
     
         // Render
         Renderer2d::ResetStats();
@@ -110,9 +115,7 @@ namespace Ugly {
 
 
         // Update Scene
-        m_ActiveScene->OnUpdate(ts);
-        Renderer2d::EndScene();
-    
+        m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
         m_FrameBuffer->Unbind();
     
     }
@@ -225,19 +228,70 @@ namespace Ugly {
 
             m_ViewportFocused = ImGui::IsWindowFocused();
 		    m_ViewportHovered = ImGui::IsWindowHovered();
-		    Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+		    Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
+
             ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
             m_ViewportSize = {viewportPanelSize.x, viewportPanelSize.y};
-            /*
-            if(m_ViewportSize != *((glm::vec2*)&viewportPanelSize)){
-                m_FrameBuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
-                m_CameraController.OnResize(viewportPanelSize.x, viewportPanelSize.y);
-            }
-            */
+
             uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
             UE_WARN("Viewport size: {0}, {1}", viewportPanelSize.x, viewportPanelSize.y);
 
-            ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{0,1},ImVec2{1, 0});
+            ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{0,1},ImVec2{1, 0});
+
+
+            // Gizmos
+            Entity selectedEntity = m_Panel.GetSelectedEntity();
+            // Make sure selectedEntity has a Transform Component
+            // otherwise creating and selecting new entity will cause a crash
+            if (selectedEntity && m_GizmoType != -1) {
+                ImGuizmo::SetOrthographic(false);
+                ImGuizmo::SetDrawlist();
+
+                float windowWidth = (float)ImGui::GetWindowWidth();
+                float windowHeight = (float)ImGui::GetWindowHeight();
+                ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+
+
+                // Gizmo Camera Stuff
+
+                /*
+                auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+                const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+                const glm::mat4& cameraProjection = camera.GetProjection();
+                glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+                */
+
+                // Editor camera
+                const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
+                glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
+
+                // Entity transform
+                auto& tc = selectedEntity.GetComponent<TransformComponent>();
+                glm::mat4 transform = tc.GetTransform();
+
+                // Snapping
+                bool snap = Input::IsKeyPressed(UE_KEY_LEFT_CONTROL);
+                float snapValue = 0.5f; // Snap to 0.5 for translation / scale
+                // Snap to 45 degrees for rotation;
+                if (m_GizmoType == ImGuizmo::OPERATION::ROTATE){
+                    snapValue = 45.0f;
+                }
+
+                float snapValues[3] = {snapValue, snapValue, snapValue};
+
+                ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection), (ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform), nullptr, snap ? snapValues : nullptr, nullptr, nullptr);
+
+                if (ImGuizmo::IsUsing()){
+                    glm::vec3 translation, scale, rotation;
+                    Maths::DecomposeTransform(transform, translation, rotation, scale);
+                    glm::vec3 deltaRotation = rotation - tc.Rotation;
+                    tc.Translation = translation;
+                    tc.Rotation += deltaRotation;
+                    tc.Scale = scale;
+
+                }
+
+            }
 
             ImGui::End();
             ImGui::PopStyleVar();
@@ -248,6 +302,8 @@ namespace Ugly {
     
     void EditorLayer::OnEvent(Event& e){
         m_CameraController.OnEvent(e);
+        m_EditorCamera.OnEvent(e);
+
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<Ugly::KeyPressedEvent>(UE_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
     }
@@ -280,6 +336,32 @@ namespace Ugly {
                     SaveSceneAs();
                     break;
                 }
+            }
+
+            // Gizmo shortcuts
+            // gets rid of the Gizmo tool onscreen
+            case UE_KEY_Q:
+            {
+                m_GizmoType = -1;
+                break;
+            }
+            // triggers the gizmo translate tool
+            case UE_KEY_W:
+            {
+                m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+                break;
+            }
+            // triggers the gizmo rotate tool
+            case UE_KEY_E:
+            {
+                m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+                break;
+            }
+            // triggers the gizmo scale tool
+            case UE_KEY_R:
+            {
+                m_GizmoType = ImGuizmo::OPERATION::SCALE;
+                break;
             }
         }
         return true;

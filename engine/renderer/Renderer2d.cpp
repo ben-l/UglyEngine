@@ -113,6 +113,20 @@ namespace Ugly {
         UE_PROFILE_FUNCTION();
     }
 
+    void Renderer2d::BeginScene(const OrthographicCamera& camera)
+    {
+        UE_PROFILE_FUNCTION();
+
+        s_Data.TextureShader->Bind();
+        s_Data.TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+
+        s_Data.QuadIndexCount = 0;
+		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.TextureSlotIndex = 1;
+
+    }
+
     void Renderer2d::BeginScene(const Camera& camera, const glm::mat4& transform)
     {
         UE_PROFILE_FUNCTION();
@@ -128,18 +142,19 @@ namespace Ugly {
 		s_Data.TextureSlotIndex = 1;
     }
 
-    void Renderer2d::BeginScene(const OrthographicCamera& camera)
-    {
+
+    void Renderer2d::BeginScene(const EditorCamera& camera){
         UE_PROFILE_FUNCTION();
 
+        glm::mat4 viewProj = camera.GetViewProjection();
+
         s_Data.TextureShader->Bind();
-        s_Data.TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+        s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
 
         s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
 
 		s_Data.TextureSlotIndex = 1;
-
     }
 
     void Renderer2d::EndScene()

@@ -27,14 +27,26 @@ namespace Ugly {
         m_Registry.destroy(entity);
     }
 
-    void Scene::OnUpdate(Timestep ts){
+    void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera){
+        Renderer2d::BeginScene(camera);
+
+        auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+        for(auto entity : group){
+            auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+            Renderer2d::DrawQuad(transform.GetTransform(), sprite.Color);
+        }
+
+        Renderer2d::EndScene();
+    }
+
+    void Scene::OnUpdateRuntime(Timestep ts){
 
         // Update scripts
         {
             m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc){
                 if (!nsc.Instance){
                     nsc.Instance = nsc.InstatiateScript();
-                    nsc.Instance->m_Entity = Entity{ entity, this};
+                    nsc.Instance->m_Entity = Entity{ entity, this };
                     nsc.Instance->OnCreate();
                 }
                 nsc.Instance->OnUpdate(ts);
@@ -44,9 +56,9 @@ namespace Ugly {
         Camera* mainCamera = nullptr;
         glm::mat4 cameraTransform;
         // Render sprites
-        auto view = m_Registry.view<CameraComponent, TransformComponent>();
+        auto view = m_Registry.view<TransformComponent, CameraComponent>();
         for (auto entity : view){
-            const auto [camera, transform] = view.get<CameraComponent, TransformComponent>(entity);
+            auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
 
             // find main camera in the scene
 
@@ -60,12 +72,11 @@ namespace Ugly {
 
         // if camera exists, do the rendering
         if (mainCamera){
-            Renderer2d::BeginScene(mainCamera->GetProjection(), cameraTransform);
-
+            Renderer2d::BeginScene(*mainCamera, cameraTransform);
 
             auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
             for(auto entity : group){
-                const auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+                auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
                 Renderer2d::DrawQuad(transform.GetTransform(), sprite.Color);
             }
 
@@ -87,6 +98,18 @@ namespace Ugly {
             }
         }
     }
+
+    Entity Scene::GetPrimaryCameraEntity(){
+        auto view = m_Registry.view<CameraComponent>();
+        for (auto entity : view){
+            const auto& camera = view.get<CameraComponent>(entity);
+            if (camera.Primary) {
+                return Entity{entity, this};
+            }
+        }
+        return {};
+    }
+
     template<typename T>
     void Scene::OnComponentAdded(Entity entity, T& component){
         static_assert(false);
@@ -100,6 +123,7 @@ namespace Ugly {
     void Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component){
         component.Camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
     }
+
     template<>
     void Scene::OnComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& component){
     }

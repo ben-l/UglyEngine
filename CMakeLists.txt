@@ -11,6 +11,7 @@ include_directories(
     engine/core
     engine/events
     engine/imgui
+    engine/maths
     engine/renderer
     engine/scene
     engine/vendor/glfw/include
@@ -22,6 +23,7 @@ include_directories(
     engine/vendor/stb_image
     engine/vendor/entt/include
     engine/vendor/yaml-cpp/include
+    engine/vendor/imguizmo
     engine/utils
     engine/platform/linux
     engine/platform/opengl

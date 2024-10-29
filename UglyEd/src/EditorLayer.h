@@ -2,6 +2,7 @@
 
 #include "UglyEngine.h"
 #include "ScenePanel.h"
+#include "EditorCamera.h"
 
 namespace Ugly {
     class EditorLayer : public Layer {
@@ -33,13 +34,16 @@ namespace Ugly {
             Entity m_SecondCamera;
 
             bool m_PrimaryCamera = true;
+
+            EditorCamera m_EditorCamera;
     
             Ref<Texture2d> m_CheckerboardTexture;
     
-            glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
         	bool m_ViewportFocused = false, m_ViewportHovered = false;
             glm::vec2 m_ViewportSize = {0.0f, 0.0f};
 
+            glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
+            int m_GizmoType = -1;
             ScenePanel m_Panel;
     
     };

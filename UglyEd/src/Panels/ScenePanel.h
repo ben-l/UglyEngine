@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Log.h"
+#include "Core.h"
 #include "Scene.h"
 #include "Entity.h"
+#include "Log.h"
 
 namespace Ugly {
     class ScenePanel {
@@ -12,6 +13,8 @@ namespace Ugly {
 
             void SetContext(const Ref<Scene>& context);
             void OnImGuiRender();
+
+            Entity GetSelectedEntity() const { return m_SelectionContext; }
         private:
             void DrawEntityNode(Entity entity);
             void DrawComponents(Entity entity);

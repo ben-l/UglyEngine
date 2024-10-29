@@ -31,6 +31,7 @@ namespace Ugly {
             m_SelectionContext = {};
         }
 
+        // Right click on panel
         if (ImGui::BeginPopupContextWindow(0, 1 | ImGuiPopupFlags_NoOpenOverItems)){
             if (ImGui::MenuItem("Create Empty Entity")){
                 m_Context->CreateEntity("Empty Entity");
@@ -51,11 +52,14 @@ namespace Ugly {
 
 
     void ScenePanel::DrawEntityNode(Entity entity){
+        // SEGMENTATION FAULT WHEN ADDING .TAG TO END OF GET COMPONENT. MIGHT BE TO DO WITH C_STR() potentially
+        // insecure.
         auto& tag = entity.GetComponent<TagComponent>();
 
         ImGuiTreeNodeFlags flags = ((m_SelectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
         flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
         bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.Tag.c_str());
+
         if (ImGui::IsItemClicked()){
             m_SelectionContext = entity;
         }
@@ -71,6 +75,7 @@ namespace Ugly {
         if (opened){
             ImGui::TreePop();
         }
+
         if (entityDeleted){
             m_Context->DestroyEntity(entity);
             if (m_SelectionContext == entity){
@@ -108,6 +113,7 @@ namespace Ugly {
         }
         ImGui::PopFont();
         ImGui::PopStyleColor(3);
+
         ImGui::SameLine();
         ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
         ImGui::PopItemWidth();
@@ -122,6 +128,7 @@ namespace Ugly {
         }
         ImGui::PopFont();
         ImGui::PopStyleColor(3);
+
         ImGui::SameLine();
         ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
         ImGui::PopItemWidth();
@@ -136,10 +143,10 @@ namespace Ugly {
         }
         ImGui::PopFont();
         ImGui::PopStyleColor(3);
+
         ImGui::SameLine();
         ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
         ImGui::PopItemWidth();
-
 
         ImGui::PopStyleVar();
 
@@ -187,31 +194,45 @@ namespace Ugly {
 
     void ScenePanel::DrawComponents(Entity entity){
         if (entity.HasComponent<TagComponent>()){
-            auto& tag = entity.GetComponent<TagComponent>().Tag;
+            auto& tag = entity.GetComponent<TagComponent>();
 
             char buffer[256];
             memset(buffer, 0, sizeof(buffer));
-            strcpy(buffer, tag.c_str());
+            strcpy(buffer, tag.Tag.c_str());
             if (ImGui::InputText("##Tag", buffer, sizeof(buffer))){
                 tag = std::string(buffer);
             }
         }
 
+        ImGui::SameLine();
+        ImGui::PushItemWidth(-1);
+
         if (ImGui::Button("Add Component")){
             ImGui::OpenPopup("AddComponent"); // id of popup
         }
+
         if (ImGui::BeginPopup("AddComponent")){
             if (ImGui::MenuItem("Camera")){
-                m_SelectionContext.AddComponent<CameraComponent>();
+                if (!m_SelectionContext.HasComponent<CameraComponent>()){
+                    m_SelectionContext.AddComponent<CameraComponent>();
+                } else {
+                    UE_CORE_WARN("This entity already has the Camera Component!");
+                }
                 ImGui::CloseCurrentPopup();
             }
 
             if (ImGui::MenuItem("Sprite Renderer")){
-                m_SelectionContext.AddComponent<SpriteRendererComponent>();
+                if(!m_SelectionContext.HasComponent<SpriteRendererComponent>()){
+                    m_SelectionContext.AddComponent<SpriteRendererComponent>();
+                } else {
+                    UE_CORE_WARN("This entity already has the Sprite Renderer Component!");
+                }
                 ImGui::CloseCurrentPopup();
             }
             ImGui::EndPopup();
         }
+
+        ImGui::PopItemWidth();
 
         DrawComponent<TransformComponent>("Transform", entity, [](auto& component){
             DrawVec3Control("Translation", component.Translation);
@@ -243,6 +264,24 @@ namespace Ugly {
                 ImGui::EndCombo();
             }
 
+            if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective){
+                float verticalFOV = glm::degrees(camera.GetPerspectiveVerticalFOV());
+                if (ImGui::DragFloat("Vertical FOV", &verticalFOV)){
+                    camera.SetPerspectiveVerticalFOV(glm::radians(verticalFOV));
+                }
+
+                float persNear = camera.GetPerspectiveNearClip();
+                if (ImGui::DragFloat("Near", &persNear)){
+                    camera.SetPerspectiveNearClip(persNear);
+                }
+
+                float persFar = camera.GetPerspectiveFarClip();
+                if (ImGui::DragFloat("Far", &persFar)){
+                    camera.SetPerspectiveFarClip(persFar);
+                }
+
+            }
+
             if (camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic){
                 float orthoSize = camera.GetOrthographicSize();
                 if (ImGui::DragFloat("Size", &orthoSize)){
@@ -260,28 +299,7 @@ namespace Ugly {
                 }
 
                 ImGui::Checkbox("Fixed Aspect Ratio", &component.FixedAspectRatio);
-
             }
-
-            if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective){
-                float verticalFOV = glm::degrees(camera.GetPerspectiveVerticalFOV());
-                if (ImGui::DragFloat("Size", &verticalFOV)){
-                    camera.SetPerspectiveVerticalFOV(glm::radians(verticalFOV));
-                }
-
-                float persNear = camera.GetPerspectiveNearClip();
-                if (ImGui::DragFloat("Near", &persNear)){
-                    camera.SetPerspectiveNearClip(persNear);
-                }
-
-                float persFar = camera.GetPerspectiveFarClip();
-                if (ImGui::DragFloat("Far", &persFar)){
-                    camera.SetPerspectiveFarClip(persFar);
-                }
-
-            }
-
-            ImGui::TreePop();
         });
 
         DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component){

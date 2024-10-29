@@ -1,8 +1,9 @@
 #include <uepch.h>
-#include <ImGuiLayer.h>
+
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
+#include <ImGuiLayer.h>
 
 #include <Application.h>
 
@@ -10,16 +11,15 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+#include <ImGuizmo.h>
+
+
 
 namespace Ugly {
     ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer")
     {
     }
     
-    ImGuiLayer::~ImGuiLayer()
-    {
-    }
-
     void ImGuiLayer::OnAttach()
     {
         UE_PROFILE_FUNCTION();
@@ -27,8 +27,7 @@ namespace Ugly {
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO(); 
-        (void)io;
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
         //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
@@ -42,9 +41,6 @@ namespace Ugly {
         ImGui::StyleColorsDark();
         //ImGui::StyleColorsClassic();
 
-        Application& app = Application::Get();
-		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
-
         // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
         ImGuiStyle& style = ImGui::GetStyle();
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -53,7 +49,10 @@ namespace Ugly {
             style.Colors[ImGuiCol_WindowBg].w = 1.0f;
         }
 
-        SetDarkThemeColors();
+        //SetDarkThemeColors();
+        Application& app = Application::Get();
+		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
+
 
         // Setup Platform/Renderer backends
         ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -84,6 +83,7 @@ namespace Ugly {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        ImGuizmo::BeginFrame();
     }
 
     void ImGuiLayer::End()
@@ -104,9 +104,6 @@ namespace Ugly {
             ImGui::RenderPlatformWindowsDefault();
             glfwMakeContextCurrent(back_current_context);
         }
-    }
-
-    void ImGuiLayer::SetDarkThemeColors(){
     }
 
 }

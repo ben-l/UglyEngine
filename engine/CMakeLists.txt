@@ -13,9 +13,11 @@ file(GLOB
 	SOURCES CONFIGURE_DEPENDS
 	core/*.cpp
 	imgui/*.cpp
+    maths/*.cpp
 	vendor/imgui/*.cpp
     vendor/stb_image/*.cpp
     vendor/yaml-cpp/src/*.cpp
+    vendor/imguizmo/*.cpp
 	platform/linux/*.cpp
     platform/opengl/*.cpp
 	renderer/*.cpp
