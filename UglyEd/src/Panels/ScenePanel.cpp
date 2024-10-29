@@ -52,8 +52,6 @@ namespace Ugly {
 
 
     void ScenePanel::DrawEntityNode(Entity entity){
-        // SEGMENTATION FAULT WHEN ADDING .TAG TO END OF GET COMPONENT. MIGHT BE TO DO WITH C_STR() potentially
-        // insecure.
         auto& tag = entity.GetComponent<TagComponent>();
 
         ImGuiTreeNodeFlags flags = ((m_SelectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
