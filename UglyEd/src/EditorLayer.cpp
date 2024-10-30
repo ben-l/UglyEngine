@@ -24,6 +24,7 @@ namespace Ugly {
         UE_PROFILE_FUNCTION();
     
         FrameBufferSpecification fbSpec;
+        fbSpec.Attachments = { FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::Depth };
         fbSpec.Width = 1280;
         fbSpec.Height = 720;
         m_FrameBuffer = FrameBuffer::Create(fbSpec);
@@ -233,7 +234,7 @@ namespace Ugly {
             ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
             m_ViewportSize = {viewportPanelSize.x, viewportPanelSize.y};
 
-            uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+            uint64_t textureID = m_FrameBuffer->GetColorAttachmentRendererID(1);
             UE_WARN("Viewport size: {0}, {1}", viewportPanelSize.x, viewportPanelSize.y);
 
             ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{0,1},ImVec2{1, 0});
