@@ -131,7 +131,11 @@ namespace Ugly {
 
         if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y) {
             int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
-            UE_CORE_WARN("pixel data = {0}", pixelData);
+            if (pixelData == -1){
+                m_HoveredEntity = {};
+            } else {
+                m_HoveredEntity = { (entt::entity)pixelData, m_ActiveScene.get() };
+            }
         }
 
 
@@ -233,6 +237,13 @@ namespace Ugly {
             m_Panel.OnImGuiRender();
             
             ImGui::Begin("Stats");
+
+            
+            std::string name = "None";
+            if (m_HoveredEntity && m_HoveredEntity.HasComponent<TagComponent>()){
+                name = m_HoveredEntity.GetComponent<TagComponent>().Tag;
+            }
+            ImGui::Text("Hovered Entity: %s", name.c_str());
     
             auto stats = Renderer2d::GetStats();
             ImGui::Text("Renderer2d Stats:");

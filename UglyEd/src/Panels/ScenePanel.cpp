@@ -202,10 +202,10 @@ namespace Ugly {
             }
         }
 
-        ImGui::SameLine();
-        ImGui::PushItemWidth(-1);
+        //ImGui::SameLine();
+        //ImGui::PushItemWidth(-1);
 
-        if (ImGui::Button("Add Component")){
+        if (ImGui::Button("+ Add Component")){
             ImGui::OpenPopup("AddComponent"); // id of popup
         }
 
@@ -230,7 +230,7 @@ namespace Ugly {
             ImGui::EndPopup();
         }
 
-        ImGui::PopItemWidth();
+        //ImGui::PopItemWidth();
 
         DrawComponent<TransformComponent>("Transform", entity, [](auto& component){
             DrawVec3Control("Translation", component.Translation);

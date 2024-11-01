@@ -33,7 +33,8 @@ namespace Ugly {
         auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
         for(auto entity : group){
             auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-            Renderer2d::DrawQuad(transform.GetTransform(), sprite.Color);
+            //Renderer2d::DrawQuad(transform.GetTransform(), sprite.Color);
+            Renderer2d::DrawSprite(transform.GetTransform(), sprite, (int)entity);
         }
 
         Renderer2d::EndScene();
@@ -77,7 +78,7 @@ namespace Ugly {
             auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
             for(auto entity : group){
                 auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-                Renderer2d::DrawQuad(transform.GetTransform(), sprite.Color);
+                Renderer2d::DrawSprite(transform.GetTransform(), sprite, (int)entity);
             }
 
             Renderer2d::EndScene();
